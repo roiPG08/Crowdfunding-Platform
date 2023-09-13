@@ -13,7 +13,7 @@
   align-items: center; /* Center the content vertically */
   padding: 120px 24px 160px 24px;
   pointer-events: none;
-  background-image: url("/images/abstract.svg"); /* Set your image path here */
+  background-image: url("/assets/images/abstract.svg"); /* Set your image path here */
   background-repeat: no-repeat; /* Prevent the image from repeating */
   background-size: cover; /* Cover the whole element with the image */
   opacity: 0.7;

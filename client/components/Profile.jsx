@@ -1,4 +1,4 @@
-import PromptCard from './PromptCard';
+import ProjectCard from './ProjectCard';
 
 const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
     return (
@@ -15,7 +15,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
             
             <div className='mt-10 prompt_layout'>
                 {data.map((post) => (
-                    <PromptCard
+                    <ProjectCard
                         key={post._id}
                         post={post}
                         handleEdit={() => handleEdit && handleEdit(post)}

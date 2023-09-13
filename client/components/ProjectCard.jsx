@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
+const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState("");
-  const {data: session } = useSession();
+  const { data: session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
   const handleCopy = () => {
@@ -43,15 +43,32 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
       </div>
 
-      <p className='my-4 font-satoshi text-sm text-gray-700'>
-        {post.prompt}
-      </p>
-      <p className='font-inter text-sm blue_gradient cursor-pointer'
-        onClick={() => handleTagClick && handleTagClick(post.tag)}>
-        #{post.tag}
-      </p>
+      <div className='flex items-center'>
+        <div className='p-1'>
+          <p className='my-4 font-satoshi text-sm text-gray-700'>
+            {post.prompt}
+            <br />
+            Brief description for project crowd funding...
+          </p>
+          <p className='font-inter text-sm blue_gradient cursor-pointer'
+            onClick={() => handleTagClick && handleTagClick(post.tag)}>
+            #{post.tag}
+          </p>
+        </div>
 
-      {session?.user.id === post.creator._id && pathName === '/profile' && (
+        <div>
+          <Image 
+            src={'/assets/images/project.svg'}
+            width={372}
+            height={372}
+          />
+        </div>
+      </div>
+
+
+
+
+      {session?.user.id === post.creator._id && pathName === '/profile' ? (
         <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
           <p className='font-inter text-sm green_gradient cursor-pointer' onClick={handleEdit}>
             Edit
@@ -60,9 +77,18 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             Delete
           </p>
         </div>
+      ):(
+        <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
+          <button className='button33 font-inter text-sm cursor-pointer' onClick={handleEdit}>
+            Donate
+          </button>
+          <button className='font-inter text-sm red_gradient cursor-pointer' onClick={handleDelete}>
+            More info
+          </button>
+        </div>
       )}
     </div>
   )
 }
 
-export default PromptCard
+export default ProjectCard

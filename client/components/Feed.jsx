@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import PromptCard from './PromptCard';
+import ProjectCard from './ProjectCard';
 
-const PromptCardList = ({ data, handleTagClick }) => {
+const ProjectCardList = ({ data, handleTagClick }) => {
   return (
     <div className='mt-16 prompt_layout'>
       {data.map((post) => (
-        <PromptCard
+        <ProjectCard
           key={post._id}
           post={post}
           handleTagClick={handleTagClick}
@@ -79,12 +79,12 @@ const Feed = () => {
       </form>
 
       {searchText ? (
-        <PromptCardList
+        <ProjectCardList
           data={searchedResults}
           handleTagClick={handleTagClick}
         />
       ) : (
-        <PromptCardList
+        <ProjectCardList
           data={posts}
           handleTagClick={handleTagClick}
         />
