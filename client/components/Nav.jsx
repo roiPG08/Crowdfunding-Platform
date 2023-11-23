@@ -23,13 +23,12 @@ const Nav = () => {
         <nav className='flex-between w-full mb-16 pt-3'>
             <Link href="/" className='flex gap-2 flex-center'>
                 <Image
-                    src='/assets/images/logo.svg'
+                    src='/assets/images/founderlogo.svg'
                     alt="Promptopia Logo"
-                    width={30}
-                    height={30}
+                    width={200}
+                    height={200}
                     className='object-contain'
                 />
-                <p className='logo_text'>Founder</p>
             </Link>
 
             {/* Desktop Navigation */}
@@ -38,7 +37,7 @@ const Nav = () => {
                     <div className='flex gap-3 md:gap-5'>
                         <Link href="/create-prompt"
                             className='black_btn'>
-                            Create Post
+                            Get Started
                         </Link>
 
                         <button type="button" onClick={signOut} className='outline_btn'>Sign Out</button>
