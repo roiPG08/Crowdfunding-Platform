@@ -85,7 +85,7 @@
 /* Tailwind Styles */
 
 .app {
-  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+  @apply relative z-10 flex justify-center items-center flex-col mx-auto sm:px-16 px-6;
 }
 
 .black_btn {
@@ -118,9 +118,11 @@
 
 .headline2 { color: #ffffff; position:relative; }
 
-.gold-text { color: #BAFF39; background: linear-gradient(to bottom, #ffd700, #b8860b);
-  background-image: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 80%);
+.gold-text { color: #BAFF39; 
+  /* background: linear-gradient(to bottom, #ffd700, #b8860b); */
+  /* background-image: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 80%); */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 7rem;
 }
 
 .blue_gradient {
@@ -144,7 +146,7 @@
 }
 
 .prompt_layout {
-  @apply space-y-6 py-8 sm:columns-2 sm:gap-6 xl:columns-3;
+  @apply space-y-6 py-8 sm:columns-3 sm:gap-6 xl:columns-3;
 }
 
 /* Feed Component */
@@ -176,7 +178,7 @@
 
 /* PromptCard Component */
 .prompt_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full md:h-[300px] h-fit;
 }
 
 .flex-center {

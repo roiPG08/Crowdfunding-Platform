@@ -4,16 +4,51 @@ import { useState, useEffect } from 'react';
 import ProjectCard from './ProjectCard';
 
 const ProjectCardList = ({ data, handleTagClick }) => {
+
+  const [scrollIndex, setScrollIndex] = useState(0);
+
+  const cardsPerPage = 3;
+  const totalCards = data.length;
+
+  const handlePrevClick = () => {
+    const newIndex = (scrollIndex - 1 + totalCards) % totalCards;
+    setScrollIndex(newIndex);
+  };
+
+  const handleNextClick = () => {
+    const newIndex = (scrollIndex + 1) % totalCards;
+    setScrollIndex(newIndex);
+  };
+
   return (
-    <div className='mt-16 prompt_layout'>
-      {data.map((post) => (
-        <ProjectCard
-          key={post._id}
-          post={post}
-          handleTagClick={handleTagClick}
-        />
-      ))}
+    <div className='mt-16'>
+      <div className='flex items-center space-x-4'>
+        <button onClick={handlePrevClick} className='text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-full text-xl p-2.5 text-center me-2 mb-2'>
+          &#8249;
+        </button>
+        <div className='flex space-x-4'>
+          {totalCards > 0 && (
+            <>
+              {[...data, ...data, ...data].slice(scrollIndex, scrollIndex + cardsPerPage).map((post) => (
+                <ProjectCard key={post._id} post={post} handleTagClick={handleTagClick} />
+              ))}
+            </>
+          )}
+        </div>
+        <button onClick={handleNextClick} type="button" className="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-full text-xl p-2.5 text-center me-2 mb-2">
+          &#8250;
+        </button>
+      </div>
     </div>
+    // <div className='mt-16 prompt_layout'>
+    //   {data.map((post) => (
+    //     <ProjectCard
+    //       key={post._id}
+    //       post={post}
+    //       handleTagClick={handleTagClick}
+    //     />
+    //   ))}
+    // </div>
   );
 };
 
@@ -21,8 +56,8 @@ const Feed = () => {
   const [searchText, setSearchText] = useState('');
   const [posts, setPosts] = useState([]);
   const [searchedResults, setSearchedResults] = useState([]);
-  
-  
+
+
   const filterPrompts = (searchedText) => {
     const regex = new RegExp(searchedText, "i"); // 'i' flag for case-insensitive search
     return posts.filter(
