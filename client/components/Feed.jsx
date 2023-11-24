@@ -40,15 +40,6 @@ const ProjectCardList = ({ data, handleTagClick }) => {
         </button>
       </div>
     </div>
-    // <div className='mt-16 prompt_layout'>
-    //   {data.map((post) => (
-    //     <ProjectCard
-    //       key={post._id}
-    //       post={post}
-    //       handleTagClick={handleTagClick}
-    //     />
-    //   ))}
-    // </div>
   );
 };
 
