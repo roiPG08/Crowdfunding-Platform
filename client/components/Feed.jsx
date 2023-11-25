@@ -20,17 +20,22 @@ const ProjectCardList = ({ data, handleTagClick }) => {
     setScrollIndex(newIndex);
   };
 
+  const cardContainerStyle = {
+    transform: `translateX(-${(scrollIndex * 100) / cardsPerPage}%)`,
+    transition: 'transform 300ms ease-in-out',
+  };
+
   return (
     <div className='mt-16'>
       <div className='flex items-center space-x-4'>
         <button onClick={handlePrevClick} className='text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-full text-xl p-2.5 text-center me-2 mb-2'>
           &#8249;
         </button>
-        <div className='flex space-x-4'>
+        <div className='flex space-x-4 overflow-x-hidden'>
           {totalCards > 0 && (
             <>
-              {[...data, ...data, ...data].slice(scrollIndex, scrollIndex + cardsPerPage).map((post) => (
-                <ProjectCard key={post._id} post={post} handleTagClick={handleTagClick} />
+              {[...data, ...data, ...data].slice(scrollIndex, scrollIndex + cardsPerPage).map((post, index) => (
+                <ProjectCard key={index} post={post} handleTagClick={handleTagClick} />
               ))}
             </>
           )}
