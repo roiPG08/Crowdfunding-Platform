@@ -18,7 +18,7 @@ const UpdatePrompt = () => {
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await fetch(`/api/prompt/${promptId}`);
+            const response = await fetch(`/api/project/${promptId}`);
             const data = await response.json();
 
             setPost({
@@ -38,7 +38,7 @@ const UpdatePrompt = () => {
         if(!promptId) return alert('Prompt ID not found');
 
         try{
-            const response = await fetch(`api/prompt/${promptId}`,{
+            const response = await fetch(`api/project/${promptId}`,{
                 method: 'PATCH',
                 body: JSON.stringify({
                     prompt: post.prompt,

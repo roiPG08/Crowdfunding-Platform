@@ -1,12 +1,12 @@
 //GET 
 import { connectToDB } from "@utils/database";
-import Prompt from '@models/prompt';
+import Project from '@models/project';
 
 export const GET = async (req, { params }) => {
     try {
         await connectToDB();
 
-        const prompt = await Prompt.findById(params.id).populate('creator');
+        const prompt = await Project.findById(params.id).populate('creator');
         if (!prompt) return new Response("Prompt not found", { status: 404 });
         return new Response(JSON.stringify(prompt), { status: 200 });
     } catch (error) {
@@ -17,17 +17,17 @@ export const GET = async (req, { params }) => {
 
 //Patch
 export const PATCH = async (req, { params }) => {
-    const { prompt, tag } = await req.json();
+    const { project_name, tag } = await req.json();
     try {
         await connectToDB();
 
-        const existingPrompt = await Prompt.findById(params.id);
-        if (!existingPrompt) return new Response("Prompt not found", { status: 404 });
+        const existingProject = await Project.findById(params.id);
+        if (!existingProject) return new Response("Project not found", { status: 404 });
 
-        existingPrompt.prompt = prompt;
-        existingPrompt.tag = tag;
+        existingProject.project_name = project_name;
+        existingProject.tag = tag;
 
-        await existingPrompt.save();
+        await existingProject.save();
         return new Response(JSON.stringify(prompts), { status: 200 });
     } catch (error) {
         return new Response("Failed to update.", { status: 500 });
@@ -39,7 +39,7 @@ export const DELETE = async (req, { params }) => {
     try {
         await connectToDB();
 
-        await Prompt.findByIdAndRemove(params.id);
+        await Project.findByIdAndRemove(params.id);
 
         return new Response("Prompt deleted successfully.", { status: 200 });
     } catch (error) {

@@ -1,13 +1,13 @@
 import { connectToDB } from "/utils/database";
-import Prompt from '/models/prompt';
+import Project from '/models/project';
 
 export const GET = async (req) => {
     try {
         await connectToDB();
         
-        const prompts = await Prompt.find({}).populate('creator');
+        const projects = await Project.find({}).populate('creator');
 
-        return new Response(JSON.stringify(prompts), {status:200});
+        return new Response(JSON.stringify(projects), {status:200});
     } catch (error) {
         return new Response("Failed to get your data", {status: 500}); 
     }

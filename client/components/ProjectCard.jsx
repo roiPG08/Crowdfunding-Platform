@@ -12,15 +12,18 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const router = useRouter();
   
   const handleCopy = () => {
-    setCopied(post.prompt);
-    navigator.clipboard.writeText(post.prompt);
+    setCopied(post.project_name);
+    navigator.clipboard.writeText(post.project_name);
     setTimeout((() => setCopied("", 3000)))
   };
 
   const truncateText = (text, maxLength) => {
-    const words = text.split(' ');
-    const truncatedWords = words.slice(0, maxLength);
-    return truncatedWords.join(' ') + (words.length > maxLength ? '...' : '');
+    if(text){
+      const words = text.split(' ');
+      const truncatedWords = words.slice(0, maxLength);
+      return truncatedWords.join(' ') + (words.length > maxLength ? '...' : '');
+    }
+    return text;
   };
 
   return (
@@ -43,14 +46,14 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           />
 
           <div className='flex flex-col'>
-            <h3 className='font -satoshi font-semibold text-gray-900'>{post.creator.username}</h3>
+            <h3 className='font -satoshi font-semibold text-gray-900'>{post.project_name}</h3>
             <p className='font-inter text-sm text-gray-500'>{post.creator.email}</p>
           </div>
         </div>
 
         <div className='copy_btn' onClick={handleCopy}>
           <Image
-            src={copied === post.prompt ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
+            src={copied === post.description ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
             width={12}
             height={12}
           />
@@ -60,7 +63,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       <div className='flex items-center'>
         <div className='px-6 md:h-[80px]'>
           <p className='my-1 font-satoshi text-sm text-gray-700'>
-          {truncateText(post.prompt, 18)}
+          {truncateText(post.description, 18)}
           </p>
           <p className='font-inter text-sm blue_gradient cursor-pointer'
             onClick={() => handleTagClick && handleTagClick(post.tag)}>

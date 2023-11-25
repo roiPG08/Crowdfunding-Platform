@@ -112,6 +112,8 @@
   @apply bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent;
 }
 
+.neon_green_gradient { background-image:linear-gradient(to right, #4fe73b, #BAFF39); color:rgba(0, 0, 0, 0); -webkit-background-clip:text; background-clip:text; position:relative; }
+
 .pink_gradient { background-image:linear-gradient(to right, #ed0082, #ff4a02); color:rgba(0, 0, 0, 0); -webkit-background-clip:text; background-clip:text; position:relative; }
 
 /* .headline { color: #fb535a; -webkit-background-clip:text; background-clip:text; position:relative; } //323232 */
@@ -131,6 +133,10 @@
 
 .desc {
   @apply mt-5 text-lg text-gray-600 sm:text-xl max-w-2xl;
+}
+
+.desc_white {
+  @apply mt-5 text-lg text-white sm:text-xl max-w-2xl;
 }
 
 .search_input {
