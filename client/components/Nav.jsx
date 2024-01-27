@@ -18,7 +18,8 @@ const Nav = () => {
             setProviders(response);
         }
         setUpProvider();
-    })
+    }, []);
+    
     return (
         <nav className='flex-between w-full mb-16 pt-3'>
             <Link href="/" className='flex gap-2 flex-center'>
@@ -30,6 +31,15 @@ const Nav = () => {
                     className='object-contain'
                 />
             </Link>
+
+            <Link href="/" className='flex gap-2 flex-center'>
+                Explore
+            </Link>
+
+            <Link href="/" className='flex gap-2 flex-center'>
+                How to start
+            </Link>
+
 
             {/* Desktop Navigation */}
             <div className='sm:flex hidden'>

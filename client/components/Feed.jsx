@@ -5,44 +5,19 @@ import ProjectCard from './ProjectCard';
 
 const ProjectCardList = ({ data, handleTagClick }) => {
 
-  const [scrollIndex, setScrollIndex] = useState(0);
-
-  const cardsPerPage = 3;
-  const totalCards = data.length;
-
-  const handlePrevClick = () => {
-    const newIndex = (scrollIndex - 1 + totalCards) % totalCards;
-    setScrollIndex(newIndex);
-  };
-
-  const handleNextClick = () => {
-    const newIndex = (scrollIndex + 1) % totalCards;
-    setScrollIndex(newIndex);
-  };
-
-  const cardContainerStyle = {
-    transform: `translateX(-${(scrollIndex * 100) / cardsPerPage}%)`,
-    transition: 'transform 300ms ease-in-out',
-  };
-
   return (
-    <div className='mt-16'>
-      <div className='flex items-center space-x-4'>
-        <button onClick={handlePrevClick} className='text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-full text-xl p-2.5 text-center me-2 mb-2'>
-          &#8249;
-        </button>
-        <div className='flex space-x-4 overflow-x-hidden'>
-          {totalCards > 0 && (
+    <div className='mt-16 mx-4'>
+      <p className='font-satohshi font-semibold text-white text-2xl my-5'>All Campaigns:</p>
+      <div className='flex items-left space-x-4'>
+        <div className='grid grid-cols-3 gap-10'>
+          {data.length > 0 && (
             <>
-              {[...data, ...data, ...data].slice(scrollIndex, scrollIndex + cardsPerPage).map((post, index) => (
+              {data.map((post, index) => (
                 <ProjectCard key={index} post={post} handleTagClick={handleTagClick} />
               ))}
             </>
           )}
         </div>
-        <button onClick={handleNextClick} type="button" className="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-full text-xl p-2.5 text-center me-2 mb-2">
-          &#8250;
-        </button>
       </div>
     </div>
   );
@@ -108,7 +83,7 @@ const Feed = () => {
           className='search_input peer'>
         </input>
       </form>
-
+      <div className='flex flex-wrap items-start'>
       {searchText ? (
         <ProjectCardList
           data={searchedResults}
@@ -120,6 +95,8 @@ const Feed = () => {
           handleTagClick={handleTagClick}
         />
       )}
+      </div>
+      
 
     </section>
   )
