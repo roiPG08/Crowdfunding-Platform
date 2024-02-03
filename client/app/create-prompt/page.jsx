@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import Form  from "@components/Form";
+import {createProjectApi} from "@src/api/projects";
+
 
 const CreatePrompt = () => {
     const router = useRouter();
@@ -21,16 +23,13 @@ const CreatePrompt = () => {
         setSubmitting(true);
 
         try{
-            const response = await fetch('api/project/new',{
-                method: 'POST',
-                body: JSON.stringify({
-                    project_name: project.project_name,
-                    description: project.description,
-                    goal: project.goal,
-                    userId: session?.user.id,
-                    tag: project.tag
-                })
-            })
+            let response = await createProjectApi(
+                project.project_name,
+                project.description,
+                project.goal,
+                session?.user.id,
+                project.tag
+            );
 
             if(response.ok){
                 router.push('/');

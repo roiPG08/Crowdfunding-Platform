@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import Form from "@components/Form";
+import {updateProjectApi, getProjectById} from "@src/api/projects";
 
 
 const UpdatePrompt = () => {
@@ -13,12 +14,11 @@ const UpdatePrompt = () => {
         tag: ''
     });
     const searchParams = useSearchParams();
-    console.log(`Use search by id ${searchParams}`);
     const promptId = searchParams.get('id');
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await fetch(`/api/project/${promptId}`);
+            const response = getProjectById(promptId);
             const data = await response.json();
 
             setPost({
@@ -38,16 +38,9 @@ const UpdatePrompt = () => {
         if(!promptId) return alert('Prompt ID not found');
 
         try{
-            const response = await fetch(`api/project/${promptId}`,{
-                method: 'PATCH',
-                body: JSON.stringify({
-                    prompt: post.prompt,
-                    tag: post.tag
-                }),
-            })
+            let response = updateProjectApi(promptId, post.prompt, post.tag);
 
             if(response.ok){
-                console.log('Is it even doing it?');
                 router.push('/');
                 return alert('Record updated.');
             }

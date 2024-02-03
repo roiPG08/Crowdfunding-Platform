@@ -1,8 +1,13 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server",
+    "dev": "nodemon server"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
@@ -16,11 +21,15 @@
     "ethers": "^6.8.0",
     "hardhat": "^2.18.3",
     "hardhat-deploy": "^0.11.43",
+    "nodemon": "^3.0.3",
     "solhint": "^4.0.0",
     "solidity-coverage": "^0.8.1"
   },
   "dependencies": {
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
-    "hardhat-gas-reporter": "^1.0.8"
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "hardhat-gas-reporter": "^1.0.8",
+    "mongoose": "^8.1.1"
   }
 }
