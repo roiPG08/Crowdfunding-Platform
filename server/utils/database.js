@@ -1,9 +1,10 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+require("dotenv").config();
 
 let isConnected = false; //track the connection status
 let connectionPromise = null;
 
-export const connectToDB = async () => {
+const connectToDB = async () => {
     mongoose.set('strictQuery', true);
 
     if (isConnected) {
@@ -13,9 +14,7 @@ export const connectToDB = async () => {
 
     try {
         await mongoose.connect(process.env.MONGODB_URI, {
-            dbName: "share_prompt",
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
+            dbName: "share_prompt"
         })
         const db = mongoose.connection;
         db.on('error', console.error.bind(console, 'Connection error:'));
@@ -29,3 +28,5 @@ export const connectToDB = async () => {
     await connectionPromise;
 
 }
+
+module.exports = {connectToDB};

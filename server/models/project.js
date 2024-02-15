@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+const { Schema, model, models } = require('mongoose');
 
 const ProjectSchema = new Schema({
     creator: {
@@ -23,4 +23,6 @@ const ProjectSchema = new Schema({
     }
 });
 
-export default models.Project || model('Project', ProjectSchema);
+const project = models.Project || model('Project', ProjectSchema);
+
+module.exports = {project};

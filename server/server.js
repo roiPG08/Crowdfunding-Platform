@@ -1,31 +1,19 @@
-import { connectToDB } from "/utils/database";
-import Project from '/models/project';
-
+const { connectToDB } = require("./utils/database.js");
 const express = require('express');
-const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
+const projectRoutes = require('./api/router/projects');
+const userRoutes = require('./api/router/users');
+
+const app = express();
 const PORT = 8080;
 
+connectToDB();
+
 app.use(cors());
+app.use('/api/v1/project', projectRoutes);
+app.use('/api/v1/user', userRoutes);
 
-app.get("/api/home", (req, res) => {
-    res.json({ message: "Hello World!"});
-});
-
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
 });
-
-
-
-app.get("api/", async (req, res) => {
-    try {
-        await connectToDB();
-        
-        const projects = await Project.find({}).populate('creator');
-
-        return new Response(JSON.stringify(projects), {status:200});
-    } catch (error) {
-        return new Response("Failed to get your data", {status: 500}); 
-    }
-}); 
