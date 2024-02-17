@@ -62,7 +62,7 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('/api/project');
+      const response = await fetch('http://localhost:8080/api/projects');
       const data = await response.json();
 
       setPosts(data);

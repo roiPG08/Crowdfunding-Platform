@@ -25,4 +25,4 @@ const ProjectSchema = new Schema({
 
 const project = models.Project || model('Project', ProjectSchema);
 
-module.exports = {project};
+module.exports = project;

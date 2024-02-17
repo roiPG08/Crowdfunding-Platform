@@ -1,5 +1,3 @@
-//setting providers such as google authentication
-
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { connectToDB } from '/utils/database';
@@ -21,10 +19,7 @@ const handler = NextAuth({
         },
         async signIn({ profile }){
             try {
-                console.log("Callbacks is working...");
-                //serverLess -> lambda -> dynamodb
-                //Only once called
-                await connectToDB();
+                //await connectToDB();
     
                 const userExists = await User.findOne({
                     email: profile.email

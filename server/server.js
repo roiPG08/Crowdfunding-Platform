@@ -11,8 +11,10 @@ const PORT = 8080;
 connectToDB();
 
 app.use(cors());
-app.use('/api/v1/project', projectRoutes);
-app.use('/api/v1/user', userRoutes);
+app.use('/api', projectRoutes);
+app.use('/api', userRoutes);
+app.use(bodyParser.json());
+
 
 app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);

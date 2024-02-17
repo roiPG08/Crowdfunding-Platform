@@ -33,6 +33,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             width={360}  
             height={200}
             className='rounded-t-lg'
+            alt='profile_image'
           />
 
       <div className='flex justify-between items-start p-5 gap-5'> 

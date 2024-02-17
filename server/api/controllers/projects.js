@@ -1,8 +1,10 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const Project = require('../../models/project');
+const { connectToDB } = require("../../utils/database.js");
 
-const getProducts = async (req, res) => {
-    const { userId, project_name, description, goal, tag } = await req.json();
+const addNewProject = async (req, res) => {
+    const { userId, project_name, description, goal, tag } = req.body;
 
     try {
         const newProject = new Project({
@@ -15,23 +17,36 @@ const getProducts = async (req, res) => {
 
         await newProject.save();
 
-        return new Response(JSON.stringify(newProject), { status: 201 });
+        res.status(201).json(newProject);
     } catch (error) {
-        return new Response("Failed to create a new prompt", { status: 500 });
+        res.status(500).json({ error: "Failed to create a new prompt" });
     }
 };
 
+const getProjectsList = async (req, res) => {
+    try {    
+        connectToDB();    
+        const projects = await Project.find({}).populate('creator');
+
+        res.status(200).json(projects);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Failed to get projects list" });
+    }
+}
 
 const getProductById = async (req, res) => {
     try {
+        console.log(req.params);
+        console.log(JSON.stringify(req.params));
         const prompt = await Project.findById(req.params.id).populate('creator');
 
-        if (!prompt) return res.status(404).json({ error: "Prompt not found" });
+        if (!prompt) res.status(404).json({ error: "Prompt not found" });
 
-        return res.status(200).json(prompt);
+        res.status(200).json(prompt);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Failed to get your data" });
+        res.status(500).json({ error: "Failed to get your data" });
     }
 };
 
@@ -45,10 +60,10 @@ const editProduct = async (req, res) => {
         existingProject.tag = tag;
 
         await existingProject.save();
-        return res.status(200).json(existingProject);
+        res.status(200).json(existingProject);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Failed to update" });
+        res.status(500).json({ error: "Failed to update" });
     }
 };
 
@@ -56,11 +71,11 @@ const deleteProject = async (req, res) => {
     try {
         await Project.findByIdAndRemove(req.params.id);
 
-        return res.status(200).json({ message: "Prompt deleted successfully" });
+        res.status(200).json({ message: "Prompt deleted successfully" });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Failed to delete" });
+        res.status(500).json({ error: "Failed to delete" });
     }
 };
 
-module.exports = { getProducts, getProductById, editProduct, deleteProject };
+module.exports = { addNewProject, getProjectsList, getProductById, editProduct, deleteProject };
