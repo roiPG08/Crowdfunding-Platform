@@ -78,4 +78,16 @@ const deleteProject = async (req, res) => {
     }
 };
 
-module.exports = { addNewProject, getProjectsList, getProductById, editProduct, deleteProject };
+const getUsersProjects = async (req, res) => {
+    try {
+                
+        const prompts = await Project.find({ creator: req.params.id }).populate('creator');
+
+        res.status(200).json(prompts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to get your data" }); 
+    }
+};
+
+module.exports = { addNewProject, getProjectsList, getProductById, getUsersProjects, editProduct, deleteProject };
