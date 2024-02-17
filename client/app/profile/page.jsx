@@ -9,22 +9,20 @@ import Profile from '@/components/Profile';
 const MyProfile = () => {
     const router = useRouter();
     const { data: session } = useSession();
-    const [ posts, setPosts] = useState([]);
+    const [ projects, setProjects] = useState([]);
 
     useEffect(() => {
-        console.log("running effect");
-        const fetchPosts = async () => {
-            const response = await fetch(`/api/users/${session?.user.id}/posts`);
+        const fetchProjects= async () => {
+            const response = await fetch(`http://localhost:8080/api/${session?.user.id}/projects`);
             const data = await response.json();
-            console.log("populating effect");
-            setPosts(data);
+            setProjects(data);
         };
 
-        if(session?.user.id) fetchPosts();
+        if(session?.user.id) fetchProjects();
     }, [session?.user.id])
 
-    const handleEdit = (posts) => {
-        router.push(`/update-prompt?id=${posts._id}`);
+    const handleEdit = (projects) => {
+        router.push(`/update-prompt?id=${projects._id}`);
     }
 
     const handleDelete = async (post) => {
@@ -36,9 +34,9 @@ const MyProfile = () => {
                     method: 'DELETE'
                 });
 
-                const filteredPosts = posts.filter((p) => p._id !== post._id)
+                const filteredProjects = projects.filter((p) => p._id !== post._id)
 
-                setPosts(filteredPosts);
+                setProjects(filteredProjects);
             } catch (error) {
                 console.log(error);
             }
@@ -49,7 +47,7 @@ const MyProfile = () => {
         <Profile
             name="Your "
             desc="You can have here some description"
-            data={posts}
+            data={projects}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
         />

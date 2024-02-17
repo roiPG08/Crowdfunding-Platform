@@ -33,7 +33,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             width={360}  
             height={200}
             className='rounded-t-lg'
-            alt='profile_image'
+            alt='card_image'
           />
 
       <div className='flex justify-between items-start p-5 gap-5'> 
@@ -57,6 +57,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             src={copied === post.description ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
             width={12}
             height={12}
+            alt='copy'
           />
         </div>
       </div>

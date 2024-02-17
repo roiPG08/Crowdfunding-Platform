@@ -12,11 +12,3 @@ export default async function sendRequest(path, options = {}) {
 
   return response;
 }
-
-
-//import 'isomorphic-unfetch';
-//const data = await response.json();
-
-// if (data.error) {
-//   throw new Error(data.error);
-// }

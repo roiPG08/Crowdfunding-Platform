@@ -8,13 +8,13 @@ export const getAllProjects = (options = {}) =>
         ...options,
     });
 
-export const getProjectById = ({ projectId }) =>
+export const getProjectById = ( projectId, options = {} ) =>
     sendRequest(`${BASE_PATH}/${projectId}`, {
         method: "GET",
-        ...options
+        ...options,
     });
 
-export const createProjectApi = ({ projectName, projectDescription, projectGoal, userId, tag }) =>
+export const createProjectApi = ( projectName, projectDescription, projectGoal, userId, tag ) =>
     sendRequest(`${BASE_PATH}/new`, {
         body: JSON.stringify({
             project_name: projectName,
@@ -25,18 +25,20 @@ export const createProjectApi = ({ projectName, projectDescription, projectGoal,
         }),
     });
 
-export const deleteProjectApi = ({ projectId }) =>
+export const deleteProjectApi = ( projectId, options = {} ) =>
     sendRequest(`${BASE_PATH}/${projectId}`, {
-        method: "DELETE"
+        method: "DELETE",
+        ...options,
     });
 
-export const updateProjectApi = ({ promptId, prompt, tag }) =>
+export const updateProjectApi = ( promptId, prompt, tag, options = {} ) =>
     sendRequest(`${BASE_PATH}/${promptId}`, {
         method: "PATCH",
         body: JSON.stringify({
             prompt: prompt,
             tag: tag
         }),
+        ...options,
     });
 
 

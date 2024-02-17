@@ -19,7 +19,7 @@ const UpdatePrompt = () => {
     useEffect(() => {
         const getPromptDetails = async () => {
             const response = getProjectById(promptId);
-            const data = await response.json();
+            const data = await response;
 
             setPost({
                 prompt: data.prompt,
@@ -27,7 +27,9 @@ const UpdatePrompt = () => {
             })
         };
 
-        if (promptId) getPromptDetails();
+        if (promptId) {
+            getPromptDetails();
+        }
 
     }, [promptId]);
 
