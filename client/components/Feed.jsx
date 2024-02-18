@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import ProjectCard from './ProjectCard';
+import { getAllProjects } from "@src/api/projects";
+
 
 const ProjectCardList = ({ data, handleTagClick }) => {
 
@@ -62,9 +64,8 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('http://localhost:8080/api/projects');
+      const response = await getAllProjects();
       const data = await response.json();
-
       setPosts(data);
     }
 

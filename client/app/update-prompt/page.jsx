@@ -10,7 +10,9 @@ const UpdatePrompt = () => {
     const router = useRouter();
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState({
-        prompt: '',
+        project_name: '',
+        description: '',
+        goal: 0,
         tag: ''
     });
     const searchParams = useSearchParams();
@@ -18,11 +20,13 @@ const UpdatePrompt = () => {
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = getProjectById(promptId);
-            const data = await response;
+            const response = await getProjectById(promptId);
+            const data = await response.json();
 
             setPost({
-                prompt: data.prompt,
+                description: data.description, 
+                goal: data.goal,
+                project_name: data.project_name,
                 tag: data.tag,
             })
         };
@@ -59,7 +63,7 @@ const UpdatePrompt = () => {
             post={post}
             setPost={setPost}
             submitting={submitting}
-            handleSubmit={(editPrompt)}
+            handleSubmit={editPrompt}
         />
 
     )

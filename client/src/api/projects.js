@@ -3,7 +3,7 @@ import sendRequest from './sendRequest';
 const BASE_PATH = '/api/project';
 
 export const getAllProjects = (options = {}) =>
-    sendRequest(`${BASE_PATH}/list`, {
+    sendRequest(`${BASE_PATH}s`, {
         method: 'GET',
         ...options,
     });

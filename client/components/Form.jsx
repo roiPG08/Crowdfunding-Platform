@@ -19,7 +19,7 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
             Project Name
           </span>
           <input 
-          value={post.project_name}
+          value={post.project_name || ''}
           onChange={(e) => setPost({ ...post, project_name: e.target.value})}
           placeholder="Write your project name here..."
           required
@@ -30,7 +30,7 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
             Project Description
           </span>
           <textarea 
-          value={post.description}
+          value={post.description || ''}
           onChange={(e) => setPost({ ...post, description: e.target.value})}
           placeholder="Write description here..."
           required
@@ -41,7 +41,7 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
             Funding Goal
           </span>
           <input 
-          value={post.goal}
+          value={post.goal || ''}
           onChange={(e) => setPost({ ...post, goal: e.target.value})}
           placeholder="00.00$"
           required
@@ -53,7 +53,7 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
             <span className='font-normal'>(#game, #product, #idea)</span>
           </span>
           <input 
-          value={post.tag}
+          value={post.tag || ''}
           onChange={(e) => setPost({ ...post, tag: e.target.value})}
           placeholder="#tag"
           required
