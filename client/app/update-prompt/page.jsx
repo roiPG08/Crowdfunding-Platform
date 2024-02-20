@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import Form from "@components/Form";
-import {updateProjectApi, getProjectById} from "@src/api/projects";
+import { updateProjectApi, getProjectById } from "@src/api/projects";
+import { useDispatch } from 'react-redux';
 
 
 const UpdatePrompt = () => {
@@ -24,7 +25,7 @@ const UpdatePrompt = () => {
             const data = await response.json();
 
             setPost({
-                description: data.description, 
+                description: data.description,
                 goal: data.goal,
                 project_name: data.project_name,
                 tag: data.tag,
@@ -37,22 +38,28 @@ const UpdatePrompt = () => {
 
     }, [promptId]);
 
+    const clear = () => {
+        setPost({ project_name: '', description: '', goal: 0, tags: '' });
+    };
+
     const editPrompt = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        
-        if(!promptId) return alert('Prompt ID not found');
 
-        try{
-            let response = updateProjectApi(promptId, post.prompt, post.tag);
+        if (!promptId) return alert('Prompt ID not found');
 
-            if(response.ok){
-                router.push('/');
-                return alert('Record updated.');
-            }
-        }catch(error){
-            console.log('Something wen wrong');
-        }finally{
+        try {
+            await updateProjectApi(promptId, post.project_name,
+                post.description,
+                post.goal,
+                post.tag);
+
+            router.push('/');
+            return alert('Record updated.');
+
+        } catch (error) {
+            console.log(error);
+        } finally {
             setSubmitting(false);
         }
     }

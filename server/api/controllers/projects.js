@@ -37,8 +37,6 @@ const getProjectsList = async (req, res) => {
 
 const getProductById = async (req, res) => {
     try {
-        console.log(req.params);
-        console.log(JSON.stringify(req.params));
         const prompt = await Project.findById(req.params.id).populate('creator');
 
         if (!prompt) res.status(404).json({ error: "Prompt not found" });
@@ -51,12 +49,17 @@ const getProductById = async (req, res) => {
 };
 
 const editProduct = async (req, res) => {
-    const { project_name, tag } = req.body;
+    const { id } = req.params;
+    console.log(req.body);
+    const { project_name, description, goal, tag } = req.body;
     try {
-        const existingProject = await Project.findById(req.params.id);
+        console.log(req.body);
+        const existingProject = await Project.findById(id);
         if (!existingProject) return res.status(404).json({ error: "Project not found" });
 
         existingProject.project_name = project_name;
+        existingProject.description = description;
+        existingProject.goal = goal;
         existingProject.tag = tag;
 
         await existingProject.save();
@@ -69,7 +72,8 @@ const editProduct = async (req, res) => {
 
 const deleteProject = async (req, res) => {
     try {
-        await Project.findByIdAndRemove(req.params.id);
+        console.log(req.params.id);
+        await Project.findByIdAndDelete(req.params.id);
 
         res.status(200).json({ message: "Prompt deleted successfully" });
     } catch (error) {

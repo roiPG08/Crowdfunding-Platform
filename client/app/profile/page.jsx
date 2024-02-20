@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-
+import { deleteProjectApi } from "@src/api/projects";
 import Profile from '@/components/Profile';
 
 const MyProfile = () => {
@@ -25,16 +25,14 @@ const MyProfile = () => {
         router.push(`/update-prompt?id=${projects._id}`);
     }
 
-    const handleDelete = async (post) => {
+    const handleDelete = async (project) => {
         const hasConfirmed = confirm("Are you sure you want to delete this prompt?");
 
         if(hasConfirmed){
             try {
-                await fetch(`/api/project/${post._id.toString()}`, {
-                    method: 'DELETE'
-                });
+                await deleteProjectApi(project._id);
 
-                const filteredProjects = projects.filter((p) => p._id !== post._id)
+                const filteredProjects = projects.filter((p) => p._id !== project._id)
 
                 setProjects(filteredProjects);
             } catch (error) {
