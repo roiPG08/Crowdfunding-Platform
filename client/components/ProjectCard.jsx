@@ -17,6 +17,10 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     setTimeout((() => setCopied("", 3000)))
   };
 
+  const showProjectInfo = () => {
+    router.push(`/project-page?id=${post._id}`);
+  };
+
   const truncateText = (text, maxLength) => {
     if(text){
       const words = text.split(' ');
@@ -85,10 +89,10 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
         </div>
       ):(
         <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
-          <button className='button33 font-inter text-sm cursor-pointer' onClick={handleEdit}>
+          <button className='button33 font-inter text-sm cursor-pointer' onClick={showProjectInfo}>
             Donate
           </button>
-          <button className='font-inter text-sm red_gradient cursor-pointer' onClick={handleDelete}>
+          <button className='font-inter text-sm red_gradient cursor-pointer' onClick={showProjectInfo}>
             More info
           </button>
         </div>

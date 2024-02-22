@@ -36,7 +36,7 @@ const Nav = () => {
                 Explore
             </Link>
 
-            <Link href="/" className='flex gap-2 flex-center'>
+            <Link href="/get-started" className='flex gap-2 flex-center'>
                 How to start
             </Link>
 

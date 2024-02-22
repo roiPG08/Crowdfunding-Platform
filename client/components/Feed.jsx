@@ -8,18 +8,22 @@ import { getAllProjects } from "@src/api/projects";
 const ProjectCardList = ({ data, handleTagClick }) => {
 
   return (
-    <div className='mt-16 mx-4'>
+    <div className='w-full sm:px-6 sm:py-24 lg:px-4'>
       <p className='font-satohshi font-semibold text-white text-2xl my-5'>All Campaigns:</p>
-      <div className='flex items-left space-x-4'>
-        <div className='grid grid-cols-3 gap-10'>
-          {data.length > 0 && (
-            <>
-              {data.map((post, index) => (
-                <ProjectCard key={index} post={post} handleTagClick={handleTagClick} />
-              ))}
-            </>
-          )}
-        </div>
+      <div className='flex items-center space-x-4'>
+        <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
+            {data.length > 0 && (
+              <>
+                {data.map((post, index) => (
+                  <ProjectCard 
+                    key={index} 
+                    post={post} 
+                    handleTagClick={handleTagClick} 
+                  />
+                ))}
+              </>
+            )}
+          </div>
       </div>
     </div>
   );
@@ -62,6 +66,10 @@ const Feed = () => {
 
   }
 
+  const handleShowProject = (project) => {
+    router.push(`/project-page?id=${project._id}`);
+  }
+
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await getAllProjects();
@@ -85,19 +93,19 @@ const Feed = () => {
         </input>
       </form>
       <div className='flex flex-wrap items-start'>
-      {searchText ? (
-        <ProjectCardList
-          data={searchedResults}
-          handleTagClick={handleTagClick}
-        />
-      ) : (
-        <ProjectCardList
-          data={posts}
-          handleTagClick={handleTagClick}
-        />
-      )}
+        {searchText ? (
+          <ProjectCardList
+            data={searchedResults}
+            handleTagClick={handleTagClick}
+          />
+        ) : (
+          <ProjectCardList
+            data={posts}
+            handleTagClick={handleTagClick}
+          />
+        )}
       </div>
-      
+
 
     </section>
   )
