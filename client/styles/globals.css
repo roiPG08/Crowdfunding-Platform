@@ -214,7 +214,7 @@
   padding: 0.8em 1.8em;
   min-width: 180px;
   min-height: 14px;
-  max-width: 250px;
+  max-width: 1250px;
   max-height: 50px;
   font-size: var(--size, 1rem);
   font-family: "Segoe UI", system-ui, sans-serif;
@@ -233,6 +233,8 @@
 
 .btn-donate:hover {
   background-position: right top;
+  --btn-bg-color: rgb(0, 0, 0);
+  color: var(--btn-bg-color);
 }
 
 .btn-donate:is(:focus, :focus-visible, :active) {
@@ -245,10 +247,10 @@
   --btn-bg-1: rgb(255, 102, 97);
   --btn-bg-2: rgb(255, 35, 31);
   --btn-bg-color: hsla(360 100% 100% / 1);
-  --radii: 0.5em;
+  --radii: 1.0em;
   cursor: pointer;
-  padding: 0.8em 1.8em;
-  min-width: 60px;
+  padding: 0.8em 1.0em;
+  min-width: 10px;
   min-height: 14px;
   max-width: 140px;
   max-height: 50px;
@@ -269,9 +271,13 @@
 
 .btn-favorite:hover {
   background-position: right top;
+  --btn-bg-color: rgb(0, 0, 0);
+  color: var(--btn-bg-color);
 }
 
 .btn-favorite:is(:focus, :focus-visible, :active) {
   outline: none;
   box-shadow: 0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2);
+  --btn-bg-color: rgb(0, 0, 0);
+  color: var(--btn-bg-color);
 }

@@ -38,16 +38,16 @@ const ProjectPage = () => {
     }, [promptId]);
 
     const handleDonate = async () => {
-        router.push(`/donate?id=${promptId}`);
+        console.log("TO BE DONE");
     }
 
     const handleAddToFavorite = async () => {
-        //TO BE DONE
+        console.log("TO BE DONE");
     }
 
     return (
         <ProjectInfo
-            data={data}
+            projectData={data}
             handleDonate={handleDonate}
             handleAddToFavorite={handleAddToFavorite}
         />

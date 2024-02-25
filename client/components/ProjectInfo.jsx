@@ -1,6 +1,14 @@
+import { useEffect } from 'react';
 import '../styles/globals.css';
+import Image from 'next/image';
+
 
 const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
+
+    // useEffect(()=>{
+    //     console.log(projectData);
+    // },[]);
+
     return (
         <section className='w-full'>
             <div className="mt-8 mx-auto w-3/4 bg-white bg-opacity-90 rounded-lg shadow-lg">
@@ -13,29 +21,65 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                             <img src={'/assets/images/project.svg'} alt="Image 3" />
                             <img src={'/assets/images/project.svg'} alt="Image 4" />
                         </div>
-                        <p className="mt-4">Category: <span className="font-bold">Your Category</span></p>
-                        <p>Location: <span className="font-bold">Your Location</span></p>
-                    </div>
+                        {/* <p className="mt-6">{projectData?.description}</p> */}
+
+                        <p className="mt-4 flex">
+                            <Image
+                                src={'/assets/icons/location.svg'}
+                                width={24}
+                                height={24}
+                                alt='location'
+                            />
+                            <span className="font-bold px-2">Swansea, United Kingdom</span>
+                        </p>
+                        <p className="mt-4 flex">
+                            <Image
+                                src={'/assets/icons/category-icon.svg'}
+                                width={24}
+                                height={24}
+                                alt='category'
+                            />
+                            <span className="font-bold px-2">Board Games</span>
+                        </p>                    </div>
 
 
                     <div className="w-1/2 pl-8 p-4">
-                        <h1 className="text-2xl font-bold text-black">Project Title</h1>
-                        <p className="mt-2">Project description...</p>
-                        <div className="mt-4">
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-4xl font-bold text-black">{projectData?.project_name}</h1>
+                            <button className="p-2 btn-favorite" onClick={handleAddToFavorite}>❤ Save</button>
+                        </div>
 
-                            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-                                <div className="bg-green-600 h-2.5 rounded-full dark:bg-green-500" style={{ width: '45%' }}></div>
+                        <div className="mt-10">
+                            <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700 mb-4">
+                                <div class="bg-green-600 text-xs font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
                             </div>
 
-                            <p className="mt-2">Funds Raised: <span className="font-bold">$Amount</span></p>
-                            <p>Days to End: <span className="font-bold">Number of Days</span></p>
+                            <div>
+                                <span className="font-bold text-2xl">123125.00$</span>
+                                <p className="">Funds Raised</p>
+                            </div>
+                            <div className='mt-4'>
+                                <span className="font-bold text-2xl">30</span>
+                                <p>Days To End</p>
+                            </div>
+
                         </div>
-                        <div className="flex">
-                        <button className="btn-donate mt-4 py-2" onClick={handleDonate}>Donate</button>
-                        <button className="mt-4 mx-4 px-4 py-2 btn-favorite" onClick={handleAddToFavorite}>❤ Save</button>
+                        <div className="mt-6 bg-gray-200 bg-opacity-25 rounded-lg shadow-lg p-3">
+                            <label>
+                                <span className="font-satohshi font-semibold text-base text-gray-700">
+                                    Back up the project
+                                </span>
+                                <input
+                                    value={''}
+                                    onChange={(e) => { }}
+                                    placeholder="00.00$"
+                                    required
+                                    className="form_input" />
+                            </label>
+                            <p className="mt-4 text-sm text-gray-500">Please note that participating in blockchain-based crowdfunding carries risks. We cannot guarantee the delivery of rewards for backing a project. Factors like project failure or regulatory changes may impact outcomes. Conduct thorough research before contributing. By participating, you accept the inherent risks and agree not to hold us liable for any losses.</p>
+                            <button className="btn-donate w-full mt-4 py-2" onClick={handleDonate}>Donate</button>
                         </div>
 
-                        <p className="mt-4 text-sm text-gray-500">Please note that participating in blockchain-based crowdfunding carries risks. We cannot guarantee the delivery of rewards for backing a project. Factors like project failure or regulatory changes may impact outcomes. Conduct thorough research before contributing. By participating, you accept the inherent risks and agree not to hold us liable for any losses.</p>
                     </div>
                 </div>
             </div>
@@ -43,35 +87,69 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
 
             {/* Forum section */}
             <div className="mt-8 mx-auto w-3/4 bg-white bg-opacity-90 rounded-lg shadow-lg">
-                <div className="flex justify-between mb-4 p-4">
-                    <a href="#campaign" className="text-blue-500">Campaign</a>
-                    <a href="#rewards" className="text-blue-500">Rewards</a>
-                    <a href="#faq" className="text-blue-500">FAQ</a>
-                    <a href="#updates" className="text-blue-500">Updates</a>
-                    <a href="#comments" className="text-blue-500">Comments</a>
+
+                {/* Navigation Bar */}
+                <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
+                    <ul className="flex flex-wrap items-center justify-center -mb-px text-sm font-medium text-center w-full" id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600 dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300" role="tablist">
+                        <li className="w-full md:w-auto mx-6" role="presentation">
+                            <button className="inline-block p-4 border-b-2 rounded-t-lg" id="campaign-styled-tab" data-tabs-target="#styled-campaign" type="button" role="tab" aria-controls="campaign" aria-selected="false">Campaign</button>
+                        </li>
+                        <li className="w-full md:w-auto mx-6" role="presentation">
+                            <button className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-green-300 dark:hover:text-gray-300" id="rewards-styled-tab" data-tabs-target="#styled-rewards" type="button" role="tab" aria-controls="rewards" aria-selected="false">Rewards</button>
+                        </li>
+                        <li className="w-full md:w-auto mx-6" role="presentation">
+                            <button className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-green-300 dark:hover:text-gray-300" id="updates-styled-tab" data-tabs-target="#styled-updates" type="button" role="tab" aria-controls="updates" aria-selected="false">Updates</button>
+                        </li>
+                        <li className="w-full md:w-auto mx-6" role="presentation">
+                            <button className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-green-300 dark:hover:text-gray-300" id="comments-styled-tab" data-tabs-target="#styled-comments" type="button" role="tab" aria-controls="comments" aria-selected="false">Comments</button>
+                        </li>
+                        <li className="w-full md:w-auto mx-6" role="presentation">
+                            <button className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-green-300 dark:hover:text-gray-300" id="faq-styled-tab" data-tabs-target="#styled-faq" type="button" role="tab" aria-controls="faq" aria-selected="false">FAQ</button>
+                        </li>
+                    </ul>
                 </div>
 
+                {/* Content */}
                 <div className="flex justify-between">
-                    <div className="w-1/4 pr-4">
-                        <h2 className="text-lg font-bold mb-2">Navigation</h2>
-                        <ul>
-                            <li><a href="#story" className="text-blue-500">Story</a></li>
-                            <li><a href="#overview" className="text-blue-500">Overview</a></li>
-                            <li><a href="#rewards" className="text-blue-500">Rewards</a></li>
-                            <li><a href="#shipping" className="text-blue-500">Shipping</a></li>
-                            <li><a href="#gameplay" className="text-blue-500">Gameplay</a></li>
+                    {/* Left Panel */}
+                    <div className="w-1/4 pr-4 border-r border-gray-200 dark:border-gray-700">
+                        <ul className="">
+                            <li className="p-2 mx-4"><a href="#story" className="text-lg font-small text-gray-600 dark:text-gray-400 hover:text-black hover:font-medium dark:hover:text-gray-300">Story</a></li>
+                            <li className="p-2 mx-4"><a href="#overview" className="text-lg font-small text-gray-600 dark:text-gray-400 hover:text-black hover:font-medium dark:hover:text-gray-300">Overview</a></li>
+                            <li className="p-2 mx-4"><a href="#rewards" className="text-lg font-small text-gray-600 dark:text-gray-400 hover:text-black hover:font-medium dark:hover:text-gray-300">Rewards</a></li>
+                            <li className="p-2 mx-4"><a href="#shipping" className="text-lg font-small text-gray-600 dark:text-gray-400 hover:text-black hover:font-medium dark:hover:text-gray-300">Shipping</a></li>
+                            <li className="p-2 mx-4"><a href="#gameplay" className="text-lg font-small text-gray-600 dark:text-gray-400 hover:text-black hover:font-medium dark:hover:text-gray-300">Gameplay</a></li>
                         </ul>
                     </div>
 
+                    {/* Main Panel */}
                     <div className="w-1/2 px-4">
+                        <div id="default-styled-tab-content">
+                            <div className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-campaign" role="tabpanel" aria-labelledby="campaign-tab">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Profile tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                            </div>
+                            <div className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-rewards" role="tabpanel" aria-labelledby="rewards-tab">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                            </div>
+                            <div className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-faq" role="tabpanel" aria-labelledby="faq-tab">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Settings tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                            </div>
+                            <div className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-updates" role="tabpanel" aria-labelledby="updates-tab">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                            </div>
+                            <div className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-comments" role="tabpanel" aria-labelledby="comments-tab">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Contacts tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="w-1/4 pl-4">
+
+                    {/* Right Panel */}
+                    <div className="w-1/4 pl-4 border-l border-gray-200 dark:border-gray-700">
                         <h2 className="text-lg font-bold mb-2">Creator</h2>
                         <p>Description about the creator...</p>
                         <h2 className="text-lg font-bold mt-4 mb-2">Support</h2>
                         <p>Description about the support...</p>
-                        <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Donate</button>
                         <h2 className="text-lg font-bold mt-4 mb-2">Rewards</h2>
                         <ul>
                             <li>Reward 1</li>
