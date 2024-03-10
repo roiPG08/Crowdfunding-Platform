@@ -15,15 +15,18 @@ export const getProjectById = ( projectId, options = {} ) =>
         ...options,
     });
 
-export const createProjectApi = ( projectName, projectDescription, projectGoal, userId, tag ) =>
+export const createProjectApi = ( projectName, projectDescription, projectGoal, timeToFund, imageFiles, userId, tag, options = {} ) =>
     sendRequest(`/api/project/new`, {
         body: JSON.stringify({
             project_name: projectName,
             description: projectDescription,
             goal: projectGoal,
+            timeToFund: timeToFund,
+            imageFiles: imageFiles,
             userId: userId,
             tag: tag
         }),
+        ...options,
     });
 
 export const deleteProjectApi = ( projectId, options = {} ) =>
