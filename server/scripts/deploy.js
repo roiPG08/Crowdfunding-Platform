@@ -1,10 +1,10 @@
 const hre = require("hardhat");
-const ethers = require("ethers");
+const {ethers} = require("hardhat");
 
 async function main() {
-  const HelloWorld = await ethers.getContractFactory("Hello World");
-  const helloWorld = await hre.ethers.deployContract("HelloWorld");
-  console.log("Contract deployed to address:", helloWorld.target);
+  const HelloWorld = await ethers.getContractFactory("HelloWorld");
+  const helloWorld = await HelloWorld.deploy("Hello World!");
+  console.log("Contract deployed to address:", helloWorld.address);
 
   // const campaign = await hre.ethers.deployContract("Campaign");
   // console.log("Contract deployed to address:", campaign.target);

@@ -16,7 +16,7 @@ yarn hardhat run scripts/deploy.js
 To compile smart contract following steps must be followed:
 
 1. Yarn hardhat compile
-2. Yarn hardhat run scripts/deploy.js --network goerli
+2. Yarn hardhat run scripts/deploy.js --network sepolia
 
 
 
