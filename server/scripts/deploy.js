@@ -2,27 +2,13 @@ const hre = require("hardhat");
 const ethers = require("ethers");
 
 async function main() {
-  // const HelloWorld = await ethers.getContractFactory("HelloWorld");
+  const HelloWorld = await ethers.getContractFactory("Hello World");
+  const helloWorld = await hre.ethers.deployContract("HelloWorld");
+  console.log("Contract deployed to address:", helloWorld.target);
 
-  // const hello_world = await HelloWorld.deploy("Hello World!");
-  // console.log("Contract deployed to address:", hello_world.target);
+  // const campaign = await hre.ethers.deployContract("Campaign");
+  // console.log("Contract deployed to address:", campaign.target);
 
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
-
-  const lockedAmount = ethers.parseEther("0.001");
-
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
-
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
 }
 main().catch((error) => {
   console.error(error);

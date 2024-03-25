@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Project = require('../../models/project');
 const { connectToDB } = require("../../utils/database.js");
+// const Campaign = require('./../../contracts/Campaign.sol');
 
 const addNewProject = async (req, res) => {
     const { userId, project_name, description, goal, tag } = req.body;
