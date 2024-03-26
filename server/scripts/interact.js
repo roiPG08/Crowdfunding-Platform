@@ -2,18 +2,23 @@ const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 const API_KEY = process.env.API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
-const hre = require("hardhat");
-const ethers = require("ethers");
+//const { ethers } = require("ethers");
 const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
 
 // provider - Alchemy
-const alchemyProvider = new ethers.AlchemyProvider(hre.network="goerli", API_KEY)
+//const alchemyProvider = new ethers.providers.AlchemyProvider("sepolia", API_KEY);
+
+// provider - Localhost
+const provider = new ethers.getDefaultProvider();
+
+// provider - Infura
+//const provider = new ethers.providers.InfuraProvider("sepolia", API_KEY);
 
 //signer - user
-const signer = new ethers.Wallet(PRIVATE_KEY, alchemyProvider);
+const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
 //contract istance
-const helloWorldContract = new ethers.Contract(CONTRACT_ADDRESS, contract.abi, alchemyProvider);
+const helloWorldContract = new ethers.Contract(CONTRACT_ADDRESS, contract.abi, signer);
 
 async function main() {
     const message = await helloWorldContract.message();

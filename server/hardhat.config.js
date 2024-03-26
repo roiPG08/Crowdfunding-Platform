@@ -10,7 +10,7 @@ module.exports = {
     defaultNetwork: "sepolia",
     networks: {
         hardhat: {},
-        goerli: {
+        sepolia: {
             url: API_URL,
             accounts: [PRIVATE_KEY],
         },
