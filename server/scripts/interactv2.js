@@ -4,14 +4,11 @@ const API_KEY = process.env.API_KEY;
 const { ethers } = require("ethers");
 const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
 
-// provider - Alchemy
-const alchemyProvider = new ethers.providers.AlchemyProvider("sepolia", API_KEY);
+//Alternative provider might be Web3 (MetaMask in-built)
+//const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 // provider - Localhost
 const provider = new ethers.providers.JsonRpcProvider();
-
-// provider - Infura
-const infuraProvider = new ethers.providers.InfuraProvider("sepolia", API_KEY);
 
 //signer - user
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);

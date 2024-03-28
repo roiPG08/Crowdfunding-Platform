@@ -5,7 +5,7 @@ contract Campaign {
 
     string public name;
     uint public projectsCount = 0;
-    address payable public owner;
+    address payable public owner; //responsible for holding all funds?
     uint public unlockTime;
 
     mapping(uint => Project) public projects;
@@ -13,10 +13,13 @@ contract Campaign {
     struct Project {
         uint id;
         string name;
-        address payable owner;
+        address payable projectOwner;
+        address payable fundsWallet;
         bool isFounded;
         uint goal;
         uint currentFounds;
+        address[] funders;
+
     }
 
     event ProjectCreated(
@@ -46,8 +49,9 @@ contract Campaign {
         require(_goal > 0);
         projectsCount++;
 
+        address[] memory funders;
         //msg.sender is the address of the user creating the product.
-        projects[projectsCount] = Project(projectsCount, _name, payable(msg.sender), false, _goal, 0);
+        projects[projectsCount] = Project(projectsCount, _name, payable(msg.sender), payable(msg.sender),  false, _goal, 0, funders);
 
         emit ProjectCreated(projectsCount, _name, payable(msg.sender), false, _goal, 0);
     }
@@ -55,7 +59,7 @@ contract Campaign {
     function fundProject(uint _id, uint _amount) public payable {
         Project memory _project = projects[_id];
 
-        address payable _fundsHolder = _project.owner;
+        address payable _fundsHolder = _project.fundsWallet;
 
         require(_project.id > 0 && _project.id <= projectsCount);
         require(msg.value <= _project.currentFounds); //is it necessary? 

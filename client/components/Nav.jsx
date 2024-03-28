@@ -4,12 +4,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
+import { MetaMaskSDK } from '@metamask/sdk';
+
 
 const Nav = () => {
     const { data: session } = useSession();
-
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
+
+    const MMSDK = new MetaMaskSDK({
+        dappMetadata: {
+            name: "Founder",
+            url: "http://localhost:3000",
+        },
+        infuraAPIKey: process.env.INFURA_API_KEY,
+    });
 
     useEffect(() => {
         const setUpProvider = async () => {
@@ -20,6 +29,18 @@ const Nav = () => {
         setUpProvider();
     }, []);
     
+    const fundProject = async () => {
+        
+    
+        const ethereum = MMSDK.getProvider();
+
+        if (typeof window !== 'undefined' && !window.ethereum) {
+            throw new Error("MetaMask not found. Please install it to proceed.");   
+        }
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts", "params": [] });
+        console.log(account);
+    };
+
     return (
         <nav className='flex-between w-full mb-16 pt-3'>
             <Link href="/" className='flex gap-2 flex-center'>
@@ -39,6 +60,10 @@ const Nav = () => {
             <Link href="/get-started" className='flex gap-2 flex-center'>
                 How to start
             </Link>
+
+            <button onClick={() => fundProject()}>
+                Fund Test
+            </button>
 
 
             {/* Desktop Navigation */}
