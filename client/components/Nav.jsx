@@ -4,7 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
-import { MetaMaskSDK } from '@metamask/sdk';
+//import { MetaMaskSDK } from '@metamask/sdk';
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
+import { useMetamask } from '@thirdweb-dev/react';
+
 
 
 const Nav = () => {
@@ -12,13 +15,16 @@ const Nav = () => {
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
-    const MMSDK = new MetaMaskSDK({
-        dappMetadata: {
-            name: "Founder",
-            url: "http://localhost:3000",
-        },
-        infuraAPIKey: process.env.INFURA_API_KEY,
-    });
+    const connect = useMetamask();
+    const address = useAddress();
+
+    // const MMSDK = new MetaMaskSDK({
+    //     dappMetadata: {
+    //         name: "Founder",
+    //         url: "http://localhost:3000",
+    //     },
+    //     infuraAPIKey: process.env.INFURA_API_KEY,
+    // });
 
     useEffect(() => {
         const setUpProvider = async () => {
@@ -32,13 +38,13 @@ const Nav = () => {
     const fundProject = async () => {
         
     
-        const ethereum = MMSDK.getProvider();
+        //const ethereum = MMSDK.getProvider();
 
         if (typeof window !== 'undefined' && !window.ethereum) {
             throw new Error("MetaMask not found. Please install it to proceed.");   
         }
         const accounts = await window.ethereum.request({ method: "eth_requestAccounts", "params": [] });
-        console.log(account);
+        console.log(accounts);
     };
 
     return (
@@ -61,8 +67,17 @@ const Nav = () => {
                 How to start
             </Link>
 
+            {/* 1st Option */}
             <button onClick={() => fundProject()}>
                 Fund Test
+            </button>
+
+            {/* 2nd Option */}
+            <ConnectWallet></ConnectWallet>
+
+            {/* 3rd Option */}
+            <button onClick={() => connect()}>
+                Fund 3
             </button>
 
 

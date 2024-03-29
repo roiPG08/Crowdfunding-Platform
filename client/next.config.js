@@ -19,6 +19,10 @@ const nextConfig = {
         ...config.experiments,
         topLevelAwait: true,
       }
+      config.ignoreWarnings = [
+        { module: /node_modules\/node-fetch\/lib\/index\.js/ },
+        { file: /node_modules\/node-fetch\/lib\/index\.js/ },
+      ]
       return config
     }
 };
