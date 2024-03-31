@@ -8,11 +8,9 @@ const addNewProject = async (req, res) => {
 
     const imagesNames = [];
     images.forEach(element => {
-        imagesNames.push(element.originalname);
+        imagesNames.push(element.filename);
     });
-
-    console.log(images);
-
+    
     //Campaign.createProject();
 
     try {

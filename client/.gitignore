@@ -16,6 +16,7 @@
 # production
 /build
 .env
+public/assets/project-images/*.jpg
 
 # misc
 .DS_Store

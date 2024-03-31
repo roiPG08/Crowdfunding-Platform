@@ -5,23 +5,29 @@ import Image from 'next/image';
 
 const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
 
-    // useEffect(()=>{
-    //     console.log(projectData);
-    // },[]);
-
     return (
         <section className='w-full'>
             <div className="mt-8 mx-auto w-3/4 bg-white bg-opacity-90 rounded-lg shadow-lg">
                 <div className="flex">
                     <div className="w-1/2 p-4">
-                        <img src={'/assets/images/project.svg'} alt="Main Image" className="w-full" />
+                        {projectData.images.length > 0 ? (
+                            <Image src={`/assets/project-images/${projectData.images[0]}`} alt="Main Image" className="w-full"
+                                width={300}
+                                height={300}
+                            />
+                        ) : null}
+
                         <div className="grid grid-cols-4 gap-4 mt-4">
-                            <img src={'/assets/images/project.svg'} alt="Image 1" />
-                            <img src={'/assets/images/project.svg'} alt="Image 2" />
-                            <img src={'/assets/images/project.svg'} alt="Image 3" />
-                            <img src={'/assets/images/project.svg'} alt="Image 4" />
+                            {projectData.images.length > 0 && projectData.images.slice(1).map((image, index) => (
+                                <Image key={index} src={`/assets/project-images/${image}`} alt={`Additional image ${index}`} className="w-full"
+                                    width={1000}
+                                    height={1000}
+                                />
+                            ))
+                            }
+
                         </div>
-                        {/* <p className="mt-6">{projectData?.description}</p> */}
+                        <p className="mt-6">{projectData?.description}</p>
 
                         <p className="mt-4 flex">
                             <Image
@@ -30,7 +36,7 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                                 height={24}
                                 alt='location'
                             />
-                            <span className="font-bold px-2">Swansea, United Kingdom</span>
+                            <span className="font-bold px-2">{projectData?.location}</span>
                         </p>
                         <p className="mt-4 flex">
                             <Image
@@ -39,8 +45,9 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                                 height={24}
                                 alt='category'
                             />
-                            <span className="font-bold px-2">Board Games</span>
-                        </p>                    </div>
+                            <span className="font-bold px-2">{projectData?.tag}</span>
+                        </p>
+                    </div>
 
 
                     <div className="w-1/2 pl-8 p-4">
@@ -54,12 +61,19 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                                 <div className="bg-green-600 text-xs font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
                             </div>
 
-                            <div>
-                                <span className="font-bold text-2xl">123125.00$</span>
-                                <p className="">Funds Raised</p>
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <span className="font-bold text-2xl">{projectData?.currentFunds}</span>
+                                    <p className="">Funds Raised [$]</p>
+                                </div>
+                                <div>
+                                    <span className="font-bold text-2xl">{projectData?.goal}</span>
+                                    <p className="">Funding Goal [$]</p>
+                                </div>
                             </div>
+
                             <div className='mt-4'>
-                                <span className="font-bold text-2xl">30</span>
+                                <span className="font-bold text-2xl">{projectData?.timeToFund}</span>
                                 <p>Days To End</p>
                             </div>
 
@@ -125,6 +139,7 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                     {/* Main Panel */}
                     <div className="w-1/2 px-4">
                         <div id="default-styled-tab-content">
+                            <p>TO BE DONE</p>
                             <div className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-campaign" role="tabpanel" aria-labelledby="campaign-tab">
                                 <p className="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Profile tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
                             </div>

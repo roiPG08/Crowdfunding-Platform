@@ -11,10 +11,17 @@ const ProjectPage = () => {
     const router = useRouter();
     const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState({
+        creator: '',
         project_name: '',
         description: '',
+        wallet: '',
+        currentFunds: 0,
         goal: 0,
-        tag: ''
+        donates: [],
+        timeToFund: '',
+        tag: '',
+        location: '',
+        images: []
     });
     const searchParams = useSearchParams();
     const promptId = searchParams.get('id');
@@ -25,11 +32,18 @@ const ProjectPage = () => {
             const data = await response.json();
 
             setData({
-                description: data.description,
-                goal: data.goal,
+                creator: data.creator,
                 project_name: data.project_name,
+                description: data.description,
+                wallet: data.wallet,
+                currentFunds: data.currentFunds,
+                goal: data.goal,
+                donates: data.donates,
+                timeToFund: data.timeToFund,
                 tag: data.tag,
-            })
+                location: data.location,
+                images: data.images
+            });
         };
 
         if (promptId) {
@@ -43,7 +57,7 @@ const ProjectPage = () => {
 
     const handleAddToFavorite = async () => {
         console.log("TO BE DONE");
-    }
+    }    
 
     return (
         <ProjectInfo

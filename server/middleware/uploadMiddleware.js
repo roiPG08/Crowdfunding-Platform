@@ -7,8 +7,9 @@ const storage = multer.diskStorage({
         cb(null, process.env.IMAGE_UPLOAD_PATH)
     },
     filename: function (req, file, cb) {
-        const date = new Date().toISOString().replace(/:/g, '-').slice(0, -5);
-        cb(null, date + " " + file.originalname)
+        //const date = new Date().toISOString().replace(/:/g, '-').slice(0, -5);
+        const uniqueSuffix = Math.round(Math.random() * 1E9); 
+        cb(null, uniqueSuffix + " " + file.originalname)
     }
 });
 const upload = multer({ storage: storage });

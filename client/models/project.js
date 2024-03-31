@@ -13,13 +13,35 @@ const ProjectSchema = new Schema({
         type: String,
         required: [true, 'Project description is required.'],
     },
+    wallet: {
+        type: String,
+    },
+    currentFunds: {
+        type: Number,
+    },
     goal: {
         type: Number,
         required: [true, 'Project goal is required.'],
     },
+    donates: [{
+        address: { type: String, required: [true, 'Address is required.'] },
+        amount: { type: Number, required: [true, 'Amount is required.'] }
+      }],
+    timeToFund: {
+        type: String,
+        required: [true, 'Funding end date is required.'],
+    },
     tag: {
         type: String,
         required: [true, 'Tag is required.'],
+    },
+    location: {
+        type: String,
+        required: [true, 'Location is required.'],
+    },
+    images: {
+        type: [String],
+        required: [true, 'Images are required'],
     }
 });
 
