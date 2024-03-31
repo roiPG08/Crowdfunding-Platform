@@ -32,13 +32,18 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
   return (
     <div className='prompt_card'>
+        <div className="w-full h-1/2">
+        {post.images.length > 0 ? (
           <Image 
-            src={'/assets/images/project.svg'}
-            width={360}  
-            height={200}
+            src={`/assets/project-images/${post.images[0]}`}
+            width={200}  
+            height={100}
             className='rounded-t-lg'
             alt='card_image'
           />
+        ) : null}
+        </div>
+        
 
       <div className='flex justify-between items-start p-5 gap-5'> 
         <div className='flex-1 flex justify-start items-center gap-3 cursor-pointer'>
