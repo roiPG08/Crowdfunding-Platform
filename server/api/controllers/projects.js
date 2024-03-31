@@ -1,32 +1,44 @@
-const express = require('express');
-const router = express.Router();
 const Project = require('../../models/project');
 const { connectToDB } = require("../../utils/database.js");
 // const Campaign = require('./../../contracts/Campaign.sol');
 
 const addNewProject = async (req, res) => {
-    const { userId, project_name, description, goal, tag } = req.body;
+    const { userId, project_name, description, goal, tag, location, timeToFund } = req.body;
+    const images = req.files;
+
+    const imagesNames = [];
+    images.forEach(element => {
+        imagesNames.push(element.originalname);
+    });
+
+    //Campaign.createProject();
 
     try {
         const newProject = new Project({
             creator: userId,
-            project_name,
-            description,
-            goal,
-            tag
-        })
+            project_name: project_name,
+            description: description,
+            wallet: "TO DO",
+            currentFunds: 0,
+            goal: goal,
+            donates: [],
+            timeToFund: timeToFund,
+            tag: tag,
+            location: location,
+            images: imagesNames
+        });
 
         await newProject.save();
 
         res.status(201).json(newProject);
     } catch (error) {
-        res.status(500).json({ error: "Failed to create a new prompt" });
+        res.status(500).json({ error: error.message });
     }
 };
 
 const getProjectsList = async (req, res) => {
-    try {    
-        connectToDB();    
+    try {
+        connectToDB();
         const projects = await Project.find({}).populate('creator');
 
         res.status(200).json(projects);
@@ -34,7 +46,7 @@ const getProjectsList = async (req, res) => {
         console.log(error);
         res.status(500).json({ error: "Failed to get projects list" });
     }
-}
+};
 
 const getProductById = async (req, res) => {
     try {
@@ -51,17 +63,23 @@ const getProductById = async (req, res) => {
 
 const editProduct = async (req, res) => {
     const { id } = req.params;
-    console.log(req.body);
-    const { project_name, description, goal, tag } = req.body;
+    const { project_name, description, tag, location } = req.body;
+
+    const images = req.files;
+    const imagesNames = [];
+    images.forEach(element => {
+        imagesNames.push(element.originalname);
+    });
+
     try {
-        console.log(req.body);
         const existingProject = await Project.findById(id);
         if (!existingProject) return res.status(404).json({ error: "Project not found" });
 
         existingProject.project_name = project_name;
         existingProject.description = description;
-        existingProject.goal = goal;
         existingProject.tag = tag;
+        existingProject.location = location;
+        existingProject.images = imagesNames;
 
         await existingProject.save();
         res.status(200).json(existingProject);
@@ -85,14 +103,46 @@ const deleteProject = async (req, res) => {
 
 const getUsersProjects = async (req, res) => {
     try {
-                
+
         const prompts = await Project.find({ creator: req.params.id }).populate('creator');
 
         res.status(200).json(prompts);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Failed to get your data" }); 
+        res.status(500).json({ error: "Failed to get your data" });
     }
 };
 
-module.exports = { addNewProject, getProjectsList, getProductById, getUsersProjects, editProduct, deleteProject };
+const fundProject = async (req, res) => {
+    try {
+        const { address, amount } = req.body;
+        const id = req.params.id;
+        //const response = await Campaign.fundProject();
+
+        if (response.success) {
+            const existingProject = await Project.findById(id);
+            if (!existingProject) return res.status(404).json({ error: "Project not found" });
+            
+            existingProject.currentFunds += amount;
+            existingProject.donates.push(new {
+                address,
+                amount
+            });
+
+            if(existingProject.currentFunds == existingProject.goal){
+                //SEND NOTIFICATION --- TO DO
+            }
+
+            await existingProject.save();
+            res.status(200).json(existingProject);
+        }else{
+
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Failed to get projects list" });
+    }
+}
+
+module.exports = { addNewProject, getProjectsList, getProductById, getUsersProjects, editProduct, deleteProject, fundProject };

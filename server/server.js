@@ -4,13 +4,10 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const projectRoutes = require('./api/router/projects');
 const userRoutes = require('./api/router/users');
-const multer = require('multer');
 
 const app = express();
 const PORT = 8080;
 
-const storage = multer.memoryStorage();
-const upload = multer({storage: storage});
 
 connectToDB();
 

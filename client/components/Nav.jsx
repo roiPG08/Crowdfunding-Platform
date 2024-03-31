@@ -4,27 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
-//import { MetaMaskSDK } from '@metamask/sdk';
-import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { useMetamask } from '@thirdweb-dev/react';
-
-
+import { ConnectWallet, useAddress, useMetamask } from "@thirdweb-dev/react";
 
 const Nav = () => {
     const { data: session } = useSession();
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
-    const connect = useMetamask();
-    const address = useAddress();
-
-    // const MMSDK = new MetaMaskSDK({
-    //     dappMetadata: {
-    //         name: "Founder",
-    //         url: "http://localhost:3000",
-    //     },
-    //     infuraAPIKey: process.env.INFURA_API_KEY,
-    // });
 
     useEffect(() => {
         const setUpProvider = async () => {
@@ -35,17 +21,6 @@ const Nav = () => {
         setUpProvider();
     }, []);
     
-    const fundProject = async () => {
-        
-    
-        //const ethereum = MMSDK.getProvider();
-
-        if (typeof window !== 'undefined' && !window.ethereum) {
-            throw new Error("MetaMask not found. Please install it to proceed.");   
-        }
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts", "params": [] });
-        console.log(accounts);
-    };
 
     return (
         <nav className='flex-between w-full mb-16 pt-3'>
@@ -67,19 +42,7 @@ const Nav = () => {
                 How to start
             </Link>
 
-            {/* 1st Option */}
-            <button onClick={() => fundProject()}>
-                Fund Test
-            </button>
-
-            {/* 2nd Option */}
             <ConnectWallet></ConnectWallet>
-
-            {/* 3rd Option */}
-            <button onClick={() => connect()}>
-                Fund 3
-            </button>
-
 
             {/* Desktop Navigation */}
             <div className='sm:flex hidden'>

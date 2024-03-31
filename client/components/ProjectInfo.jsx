@@ -50,8 +50,8 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                         </div>
 
                         <div className="mt-10">
-                            <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700 mb-4">
-                                <div class="bg-green-600 text-xs font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
+                            <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700 mb-4">
+                                <div className="bg-green-600 text-xs font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
                             </div>
 
                             <div>
