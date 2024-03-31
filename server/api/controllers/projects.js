@@ -11,6 +11,8 @@ const addNewProject = async (req, res) => {
         imagesNames.push(element.originalname);
     });
 
+    console.log(images);
+
     //Campaign.createProject();
 
     try {

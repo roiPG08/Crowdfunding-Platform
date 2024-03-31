@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/')
+        cb(null, process.env.IMAGE_UPLOAD_PATH)
     },
     filename: function (req, file, cb) {
         const date = new Date().toISOString().replace(/:/g, '-').slice(0, -5);
