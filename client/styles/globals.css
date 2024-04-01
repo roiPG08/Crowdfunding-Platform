@@ -185,7 +185,7 @@
 
 /* PromptCard Component */
 .prompt_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 backdrop-blur-lg backdrop-filter md:w-[360px] w-full md:h-[450px] h-fit;
+  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 backdrop-blur-lg backdrop-filter md:w-[360px] w-full md:h-[500px] h-fit;
 }
 
 .flex-center {

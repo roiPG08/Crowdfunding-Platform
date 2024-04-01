@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import '../styles/globals.css';
 import Image from 'next/image';
+import ErrorMessage from './ErrorMessage';
 
-
-const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
+const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavorite, error }) => {
 
     return (
         <section className='w-full'>
@@ -64,11 +64,11 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                             <div className="flex justify-between items-center">
                                 <div>
                                     <span className="font-bold text-2xl">{projectData?.currentFunds}</span>
-                                    <p className="">Funds Raised [$]</p>
+                                    <p className="">Funds Raised</p>
                                 </div>
                                 <div>
                                     <span className="font-bold text-2xl">{projectData?.goal}</span>
-                                    <p className="">Funding Goal [$]</p>
+                                    <p className="">Funding Goal</p>
                                 </div>
                             </div>
 
@@ -84,14 +84,20 @@ const ProjectInfo = ({ projectData, handleDonate, handleAddToFavorite }) => {
                                     Back up the project
                                 </span>
                                 <input
-                                    value={''}
-                                    onChange={(e) => { }}
+                                    type='number'
+                                    onChange={(e) => {
+                                        setFundAmount(e.target.value);
+                                        //truncate number 2 points after '.' 
+                                    }}
                                     placeholder="00.00$"
                                     required
                                     className="form_input" />
                             </label>
                             <p className="mt-4 text-sm text-gray-500">Please note that participating in blockchain-based crowdfunding carries risks. We cannot guarantee the delivery of rewards for backing a project. Factors like project failure or regulatory changes may impact outcomes. Conduct thorough research before contributing. By participating, you accept the inherent risks and agree not to hold us liable for any losses.</p>
                             <button className="btn-donate w-full mt-4 py-2" onClick={handleDonate}>Donate</button>
+                            {error ? (
+                                <ErrorMessage message={error.message}/>
+                            ) : null}
                         </div>
 
                     </div>

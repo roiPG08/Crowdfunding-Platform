@@ -9,13 +9,13 @@ export const getAllProjects = (options = {}) =>
         ...options,
     });
 
-export const getProjectById = ( projectId, options = {} ) =>
+export const getProjectById = (projectId, options = {}) =>
     sendRequest(`/api/project/${projectId}`, {
         method: "GET",
         ...options,
     });
 
-export const createProjectApi = ( projectName, projectDescription, projectGoal, timeToFund, imageFiles, userId, tag, options = {} ) =>
+export const createProjectApi = (projectName, projectDescription, projectGoal, timeToFund, imageFiles, userId, tag, options = {}) =>
     sendRequest(`/api/project/new`, {
         body: JSON.stringify({
             project_name: projectName,
@@ -29,13 +29,13 @@ export const createProjectApi = ( projectName, projectDescription, projectGoal, 
         ...options,
     });
 
-export const deleteProjectApi = ( projectId, options = {} ) =>
+export const deleteProjectApi = (projectId, options = {}) =>
     sendRequest(`/api/delete-project/${projectId}`, {
         method: "DELETE",
         ...options,
     });
 
-    export const updateProjectApi = ( promptId, projectName, projectDescription, projectGoal, tag, options = {} ) =>
+export const updateProjectApi = (promptId, projectName, projectDescription, projectGoal, tag, options = {}) =>
     sendRequest(`/api/update-project/${promptId}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -47,7 +47,16 @@ export const deleteProjectApi = ( projectId, options = {} ) =>
         ...options,
     });
 
-    //Axios version of updateProjectApi
-    //export const updateProjectApi = ( promptId, projectData ) => axios.patch(`${BASE_PATH}/update-project/${promptId}`, projectData);    
+export const fundProjectApi = (promptId, address, amount) =>
+    sendRequest(`/api/project/${promptId}/fund`, {
+        body: JSON.stringify({
+            address: address,
+            amount: amount
+        }),
+        ...options,
+    });
+
+//Axios version of updateProjectApi
+//export const updateProjectApi = ( promptId, projectData ) => axios.patch(`${BASE_PATH}/update-project/${promptId}`, projectData);    
 
 

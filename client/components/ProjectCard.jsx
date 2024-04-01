@@ -32,20 +32,20 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
   return (
     <div className='prompt_card'>
-        <div className="w-full h-1/2">
+        <div className="w-full h-1/2 relative">
         {post.images.length > 0 ? (
           <Image 
             src={`/assets/project-images/${post.images[0]}`}
-            width={200}  
-            height={100}
-            className='rounded-t-lg'
+            layout="fill"
+            objectFit="cover"
+            className='rounded-t-lg absolute'
             alt='card_image'
           />
         ) : null}
         </div>
         
 
-      <div className='flex justify-between items-start p-5 gap-5'> 
+      <div className='flex justify-between items-start px-5 pt-4 pb-2 gap-4'> 
         <div className='flex-1 flex justify-start items-center gap-3 cursor-pointer'>
           <Image
             src={post.creator.image}
@@ -74,7 +74,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       <div className='flex items-center'>
         <div className='px-6 md:h-[80px]'>
           <p className='my-1 font-satoshi text-sm text-gray-700'>
-          {truncateText(post.description, 18)}
+          {truncateText(post.description, 22)}
           </p>
           <p className='font-inter text-sm blue_gradient cursor-pointer'
             onClick={() => handleTagClick && handleTagClick(post.tag)}>
@@ -84,7 +84,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       </div>
 
       {session?.user.id === post.creator._id && pathName === '/profile' ? (
-        <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
+        <div className='mt-10 flex-center gap-4 border-t border-gray-100 pt-3'>
           <p className='font-inter text-sm green_gradient cursor-pointer' onClick={handleEdit}>
             Edit
           </p>
@@ -93,12 +93,9 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           </p>
         </div>
       ):(
-        <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
+        <div className='mt-10 flex-center gap-4 border-t border-gray-100 pt-3'>
           <button className='button33 font-inter text-sm cursor-pointer' onClick={showProjectInfo}>
-            Donate
-          </button>
-          <button className='font-inter text-sm red_gradient cursor-pointer' onClick={showProjectInfo}>
-            More info
+            View
           </button>
         </div>
       )}

@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import ProjectInfo from '@components/ProjectInfo';
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getProjectById } from "@src/api/projects";
+import { getProjectById, fundProjectApi } from "@src/api/projects";
 import { useDispatch } from 'react-redux';
+import { useAddress } from '@thirdweb-dev/react';
 
 const ProjectPage = () => {
     const router = useRouter();
@@ -23,8 +24,11 @@ const ProjectPage = () => {
         location: '',
         images: []
     });
+    const [fundAmount, setFundAmount] = useState(0);
     const searchParams = useSearchParams();
     const promptId = searchParams.get('id');
+    const address = useAddress();
+    const [error, setError] = useState("");
 
     useEffect(() => {
         const getPromptDetails = async () => {
@@ -51,19 +55,57 @@ const ProjectPage = () => {
         }
     }, [promptId]);
 
-    const handleDonate = async () => {
-        console.log("TO BE DONE");
+    const fundProject = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        setError(null);
+
+        try {
+            if(!window.ethereum){
+                throw new Error("Install crypto wallet to proceed.");
+            }
+
+            if(fundAmount < 10){
+                throw new Error("Come on, don't be such a poory - pay more...")
+            }
+
+            const account = await window.ethereum.request({
+                "method": "eth_requestAccounts",
+                "params": []
+              });
+
+            const response = await fundProjectApi(promptId, account[0], fundAmount);
+
+            if (response.ok) {
+                return alert('Funding sent successfully.');
+            }
+        } catch (error) {
+            setError(error);
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     const handleAddToFavorite = async () => {
-        console.log("TO BE DONE");
-    }    
+        try {
+            //await addToFavoritesApi(promptId);
+
+            // if (response.ok) {
+            //     return alert('Added to favorites.');
+            // }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setSubmitting(false);
+        }    }    
 
     return (
         <ProjectInfo
             projectData={data}
-            handleDonate={handleDonate}
+            setFundAmount={setFundAmount}
+            handleDonate={fundProject}
             handleAddToFavorite={handleAddToFavorite}
+            error={error}
         />
     )
 }

@@ -1,6 +1,15 @@
+const API_KEY = process.env.API_KEY;
+const CONTRACT_ADDRESS = process.env.LOCALHOST_CONTRACT_ADDRESS;
+const PRIVATE_KEY = process.env.LOCALHOST_PRIVATE_KEY;
+
+const ethers = require('ethers');
 const Project = require('../../models/project');
 const { connectToDB } = require("../../utils/database.js");
-// const Campaign = require('./../../contracts/Campaign.sol');
+
+const provider = new ethers.providers.JsonRpcProvider();
+const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+const {abi} = require("./../../artifacts/contracts/Campaign.sol/Campaign.json");
+const Campaign = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
 
 const addNewProject = async (req, res) => {
     const { userId, project_name, description, goal, tag, location, timeToFund } = req.body;
@@ -11,7 +20,21 @@ const addNewProject = async (req, res) => {
         imagesNames.push(element.filename);
     });
     
-    //Campaign.createProject();
+    const project = await Campaign.createProject({
+        creator: userId,
+        project_name: project_name,
+        description: description,
+        wallet: "TO DO",
+        currentFunds: 0,
+        goal: goal,
+        donates: [],
+        timeToFund: timeToFund,
+        tag: tag,
+        location: location,
+        images: imagesNames
+    });
+
+    console.log(project);
 
     try {
         const newProject = new Project({
@@ -117,7 +140,14 @@ const fundProject = async (req, res) => {
     try {
         const { address, amount } = req.body;
         const id = req.params.id;
-        //const response = await Campaign.fundProject();
+        
+        const tx = {
+            from: address,
+            to: existingProject.contractAddress,
+            value: web3.utils.toWei(amount, 'ether'),
+            gas: 2000000,
+            data: contract.methods.fundProject().encodeABI() // replace with your contract's method
+        };
 
         if (response.success) {
             const existingProject = await Project.findById(id);
