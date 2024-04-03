@@ -19,22 +19,6 @@ const addNewProject = async (req, res) => {
     images.forEach(element => {
         imagesNames.push(element.filename);
     });
-    
-    const project = await Campaign.createProject({
-        creator: userId,
-        project_name: project_name,
-        description: description,
-        wallet: "TO DO",
-        currentFunds: 0,
-        goal: goal,
-        donates: [],
-        timeToFund: timeToFund,
-        tag: tag,
-        location: location,
-        images: imagesNames
-    });
-
-    console.log(project);
 
     try {
         const newProject = new Project({
@@ -51,9 +35,11 @@ const addNewProject = async (req, res) => {
             images: imagesNames
         });
 
-        await newProject.save();
+        const project = await Campaign.createProject(project_name, description, goal, timeToFund, tag, location, imagesNames);
 
-        res.status(201).json(newProject);
+        //await newProject.save();
+
+        res.status(201).json(project);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -64,7 +50,9 @@ const getProjectsList = async (req, res) => {
         connectToDB();
         const projects = await Project.find({}).populate('creator');
 
-        res.status(200).json(projects);
+        const projectsSC = await Campaign.getAllProjects();
+
+        res.status(200).json(projectsSC);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Failed to get projects list" });
@@ -140,18 +128,28 @@ const fundProject = async (req, res) => {
     try {
         const { address, amount } = req.body;
         const id = req.params.id;
-        
-        const tx = {
-            from: address,
-            to: existingProject.contractAddress,
-            value: web3.utils.toWei(amount, 'ether'),
-            gas: 2000000,
-            data: contract.methods.fundProject().encodeABI() // replace with your contract's method
-        };
 
-        if (response.success) {
+        //if (response.success) {
             const existingProject = await Project.findById(id);
             if (!existingProject) return res.status(404).json({ error: "Project not found" });
+
+            const projectsSC = await Campaign.getAllProjects();
+            let walletAddress = "";
+            
+            projectsSC.forEach(element => {
+                if(element.name == existingProject.project_name){
+                    console.log("Found project wallet: " + element.projectOwner)
+                    walletAddress = element.projectOwner;
+                }
+            });
+            
+            const tx = {
+                from: address,
+                to: walletAddress,
+                value: web3.utils.toWei(amount, 'ether'),
+                gas: 2000000,
+                data: Campaign.fundProject().encodeABI()
+            };
             
             existingProject.currentFunds += amount;
             existingProject.donates.push(new {
@@ -163,15 +161,13 @@ const fundProject = async (req, res) => {
                 //SEND NOTIFICATION --- TO DO
             }
 
-            await existingProject.save();
+            //await existingProject.save();
             res.status(200).json(existingProject);
-        }else{
-
-        }
+        //}
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Failed to get projects list" });
+        res.status(500).json({ error: "Failed to donate." });
     }
 }
 
