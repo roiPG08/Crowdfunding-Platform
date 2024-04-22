@@ -32,7 +32,10 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
           </span>
           <input className="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
           id="default_size" 
-          onChange={(e) => setPost({ ...post, imageFiles: e.target.value })}
+          onChange={(e) => {
+            const files = Array.from(e.target.files);
+            setPost({ ...post, imageFiles: files });
+          }}
           type="file"></input>
           {/* <div className="flex items-center justify-center w-full">
             <label for="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -77,8 +80,11 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
           </span>
           <input
             type="Date"
-            value={post.endDate || ''}
-            onChange={(e) => setPost({ ...post, endDate: e.target.value })}
+            value={post.timeToFund || ''}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setPost({ ...post, timeToFund: e.target.value });
+            }}
             required
             className="form_input" />
         </label>

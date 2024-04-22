@@ -18,7 +18,7 @@ const ProjectCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   };
 
   const showProjectInfo = () => {
-    router.push(`/project-page?id=${post._id}`);
+    router.push(`/project-page?id=${post.id}`);
   };
 
   const truncateText = (text, maxLength) => {

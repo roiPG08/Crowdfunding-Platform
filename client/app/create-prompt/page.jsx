@@ -18,9 +18,25 @@ const CreatePrompt = () => {
         currentFund: 0,
         timeToFund: '',
         imageFiles: [],
+        location: '',
         walletId: '',
         tag: '',
     });
+
+    const calculateDaysLeft = () => {
+        if (!project.timeToFund) {
+          return null; 
+        }
+    
+        const deadlineDate = new Date(project.timeToFund); 
+        const currentDate = new Date(); 
+    
+        const differenceMs = deadlineDate - currentDate;
+    
+        const daysLeft = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+
+        return daysLeft;
+      };
 
     const createPrompt = async (e) => {
         e.preventDefault();
@@ -28,22 +44,22 @@ const CreatePrompt = () => {
 
         try {
             const formData = new FormData();
-            formData.append("image", file);
-            formData.append("caption", caption);
-            await axios.post("/api/posts", formData, )
+            formData.append("project_name", project.project_name);
+            formData.append("description", project.description);
+            formData.append("goal", project.goal);
+            formData.append("timeToFund", calculateDaysLeft());
+            formData.append("tag", project.tag);
+            formData.append("location", project.location);
+            formData.append("userId", session?.user.id);
             
-            let response = await createProjectApi(
-                project.project_name,
-                project.description,
-                project.goal,
-                project.timeToFund,
-                project.imageFiles,
-                session?.user.id,
-                project.tag,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
-            );
+            project.imageFiles.forEach(element => {
+                formData.append("images", element);
+            });
 
-            if (response.ok) {
+            let response = await createProjectApi(formData);
+
+            if (response.status >= 200 && response.status < 300) {
+                alert("Project created successfully.");
                 router.push('/');
             }
         } catch (error) {

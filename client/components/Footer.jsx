@@ -14,7 +14,7 @@ const Footer = () => {
                 <div className='grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4 mt-4'>
                     <div className=''>
                         <h6 className='mb-4 flex items-center justify-center font-semibold uppercase md:justify-start'>Founder</h6>
-                        <p>Description... Footer content. Lorem ipsum to tekst składający się z łacińskich i quasi-łacińskich wyrazów, mający korzenie w klasycznej łacinie, wzorowany na fragmencie traktatu Cycerona „O granicach dobra i zła” napisanego w 45 p.n.e. </p>
+                        <p>Innovative Funding Revolutionizing project financing through decentralized crowdfunding Blockchain Security Ensuring transparency and security with blockchain technology Global Access Empowering creators and investors worldwide to connect and collaborate Sustainable Growth Fostering sustainable development with efficient low-cost transactions. </p>
                     </div>
                     <div className=''>
                         <h6 className='mb-4 flex items-center justify-center font-semibold uppercase md:justify-start'>Products</h6>

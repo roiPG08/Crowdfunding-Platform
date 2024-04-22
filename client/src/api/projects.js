@@ -1,8 +1,6 @@
 import sendRequest from './sendRequest';
 import axios from 'axios';
 
-const BASE_PATH = 'http://localhost:8080/api';
-
 export const getAllProjects = (options = {}) =>
     sendRequest(`/api/projects`, {
         method: 'GET',
@@ -15,19 +13,16 @@ export const getProjectById = (projectId, options = {}) =>
         ...options,
     });
 
-export const createProjectApi = (projectName, projectDescription, projectGoal, timeToFund, imageFiles, userId, tag, options = {}) =>
-    sendRequest(`/api/project/new`, {
-        body: JSON.stringify({
-            project_name: projectName,
-            description: projectDescription,
-            goal: projectGoal,
-            timeToFund: timeToFund,
-            imageFiles: imageFiles,
-            userId: userId,
-            tag: tag
-        }),
-        ...options,
-    });
+export const createProjectApi = async (formData, options = {}) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/project/new`, formData);
+
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
 export const deleteProjectApi = (projectId, options = {}) =>
     sendRequest(`/api/delete-project/${projectId}`, {
@@ -47,11 +42,10 @@ export const updateProjectApi = (promptId, projectName, projectDescription, proj
         ...options,
     });
 
-export const fundProjectApi = (promptId, address, amount) =>
+export const fundProjectApi = (promptId, tx, options = {}) =>
     sendRequest(`/api/project/${promptId}/fund`, {
         body: JSON.stringify({
-            address: address,
-            amount: amount
+            tx: tx
         }),
         ...options,
     });

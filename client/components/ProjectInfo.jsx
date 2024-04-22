@@ -10,7 +10,7 @@ const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavo
             <div className="mt-8 mx-auto w-3/4 bg-white bg-opacity-90 rounded-lg shadow-lg">
                 <div className="flex">
                     <div className="w-1/2 p-4">
-                        {projectData.images.length > 0 ? (
+                        {projectData.images?.length > 0 ? (
                             <Image src={`/assets/project-images/${projectData.images[0]}`} alt="Main Image" className="w-full"
                                 width={300}
                                 height={300}
@@ -18,7 +18,7 @@ const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavo
                         ) : null}
 
                         <div className="grid grid-cols-4 gap-4 mt-4">
-                            {projectData.images.length > 0 && projectData.images.slice(1).map((image, index) => (
+                            {projectData.images?.length > 0 && projectData.images?.slice(1).map((image, index) => (
                                 <Image key={index} src={`/assets/project-images/${image}`} alt={`Additional image ${index}`} className="w-full"
                                     width={1000}
                                     height={1000}
@@ -58,16 +58,16 @@ const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavo
 
                         <div className="mt-10">
                             <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700 mb-4">
-                                <div className="bg-green-600 text-xs font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{ width: '45%' }}> 45%</div>
+                                <div className="bg-green-600 text-xs font-medium text-green-100 text-center p-0.5 leading-none rounded-full" style={{ width: '0%' }}> 45%</div>
                             </div>
 
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <span className="font-bold text-2xl">{projectData?.currentFunds}</span>
+                                    <span className="font-bold text-2xl">{projectData?.currentFunds} ETH</span>
                                     <p className="">Funds Raised</p>
                                 </div>
                                 <div>
-                                    <span className="font-bold text-2xl">{projectData?.goal}</span>
+                                    <span className="font-bold text-2xl">{projectData?.goal} ETH</span>
                                     <p className="">Funding Goal</p>
                                 </div>
                             </div>

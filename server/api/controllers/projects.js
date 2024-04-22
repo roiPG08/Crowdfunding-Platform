@@ -4,11 +4,12 @@ const PRIVATE_KEY = process.env.LOCALHOST_PRIVATE_KEY;
 
 const ethers = require('ethers');
 const Project = require('../../models/project');
+const User = require('../../models/user');
 const { connectToDB } = require("../../utils/database.js");
 
 const provider = new ethers.providers.JsonRpcProvider();
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-const {abi} = require("./../../artifacts/contracts/Campaign.sol/Campaign.json");
+const { abi } = require("./../../artifacts/contracts/Campaign.sol/Campaign.json");
 const Campaign = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
 
 const addNewProject = async (req, res) => {
@@ -21,51 +22,41 @@ const addNewProject = async (req, res) => {
     });
 
     try {
-        const newProject = new Project({
-            creator: userId,
-            project_name: project_name,
-            description: description,
-            wallet: "TO DO",
-            currentFunds: 0,
-            goal: goal,
-            donates: [],
-            timeToFund: timeToFund,
-            tag: tag,
-            location: location,
-            images: imagesNames
-        });
-
-        const project = await Campaign.createProject(project_name, description, goal, timeToFund, tag, location, imagesNames);
-
-        //await newProject.save();
-
+        const project = await Campaign.createProject(userId, project_name, description, goal, timeToFund, tag, location, imagesNames);
+        console.log(project);
         res.status(201).json(project);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error.message });
     }
 };
 
 const getProjectsList = async (req, res) => {
     try {
-        connectToDB();
-        const projects = await Project.find({}).populate('creator');
+        const projects = await Campaign.getAllProjects();
 
-        const projectsSC = await Campaign.getAllProjects();
+        const formattedProjects = await Promise.all(projects.map(formatProject))
 
-        res.status(200).json(projectsSC);
+        //console.log(formattedProjects);
+
+        res.status(200).json(formattedProjects);
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).json({ error: "Failed to get projects list" });
     }
 };
 
-const getProductById = async (req, res) => {
+const getProjectById = async (req, res) => {
     try {
-        const prompt = await Project.findById(req.params.id).populate('creator');
+        const project = await Campaign.getProjectById(req.params.id);
 
-        if (!prompt) res.status(404).json({ error: "Prompt not found" });
+        const formattedProject = await formatProject(project);
 
-        res.status(200).json(prompt);
+        //console.log(formattedProject);
+
+        if (!project) res.status(404).json({ error: "Project not found" });
+
+        res.status(200).json(formattedProject);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to get your data" });
@@ -126,43 +117,39 @@ const getUsersProjects = async (req, res) => {
 
 const fundProject = async (req, res) => {
     try {
-        const { address, amount } = req.body;
+        const { tx } = req.body;
         const id = req.params.id;
+        const { from, to, hash, value } = tx;
 
+        const data = await Campaign.fundProject(id, hash, from, {value: value});
+        console.log(data);
+        res.status(200).json(tx);
         //if (response.success) {
-            const existingProject = await Project.findById(id);
-            if (!existingProject) return res.status(404).json({ error: "Project not found" });
+        // const existingProject = await Project.findById(id);
+        // if (!existingProject) return res.status(404).json({ error: "Project not found" });
 
-            const projectsSC = await Campaign.getAllProjects();
-            let walletAddress = "";
-            
-            projectsSC.forEach(element => {
-                if(element.name == existingProject.project_name){
-                    console.log("Found project wallet: " + element.projectOwner)
-                    walletAddress = element.projectOwner;
-                }
-            });
-            
-            const tx = {
-                from: address,
-                to: walletAddress,
-                value: web3.utils.toWei(amount, 'ether'),
-                gas: 2000000,
-                data: Campaign.fundProject().encodeABI()
-            };
-            
-            existingProject.currentFunds += amount;
-            existingProject.donates.push(new {
-                address,
-                amount
-            });
+        // const projectsSC = await Campaign.getAllProjects();
+        // let walletAddress = "";
 
-            if(existingProject.currentFunds == existingProject.goal){
-                //SEND NOTIFICATION --- TO DO
-            }
+        // projectsSC.forEach(element => {
+        //     if(element.name == existingProject.project_name){
+        //         console.log("Found project wallet: " + element.projectOwner)
+        //         walletAddress = element.projectOwner;
+        //     }
+        // });
 
-            //await existingProject.save();
-            res.status(200).json(existingProject);
+        // existingProject.currentFunds += amount;
+        // existingProject.donates.push(new {
+        //     address,
+        //     amount
+        // });
+
+        // if(existingProject.currentFunds == existingProject.goal){
+        //     //SEND NOTIFICATION --- TO DO
+        // }
+
+        //await existingProject.save();
+        // res.status(200).json(existingProject);
         //}
 
     } catch (error) {
@@ -171,4 +158,28 @@ const fundProject = async (req, res) => {
     }
 }
 
-module.exports = { addNewProject, getProjectsList, getProductById, getUsersProjects, editProduct, deleteProject, fundProject };
+const formatProject = async (project) => {
+    const [id, userId, name, description, projectOwner, isFunded, goal, tag, location, images, unlockTime, currentFunds, funders, donations] = project;
+
+    // Fetch creator data asynchronously
+    const creator = await User.findById(userId);
+
+    return {
+        id: id.toNumber(),
+        creator,
+        project_name: name,
+        description,
+        projectOwner,
+        isFunded,
+        goal: goal.toNumber(),
+        tag,
+        location,
+        images,
+        unlockTime: unlockTime.toNumber(),
+        currentFunds: ethers.utils.formatEther(currentFunds),
+        funders,
+        donations
+    };
+};
+
+module.exports = { addNewProject, getProjectsList, getProjectById, getUsersProjects, editProduct, deleteProject, fundProject };

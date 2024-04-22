@@ -12,7 +12,7 @@ module.exports = {
         hardhat: {},
         sepolia: {
             url: API_URL,
-            accounts: [PRIVATE_KEY], //it should be the address location like this: 0x${process.env.LOCALHOST_CONTRACT_ADDRESS}
+            accounts: [PRIVATE_KEY],
         },
     },
     mocha: {

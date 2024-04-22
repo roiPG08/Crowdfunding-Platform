@@ -27,15 +27,15 @@ const ProjectPage = () => {
     });
     const [fundAmount, setFundAmount] = useState(0);
     const searchParams = useSearchParams();
-    const promptId = searchParams.get('id');
+    const projectId = searchParams.get('id');
     const address = useAddress();
     const [error, setError] = useState("");
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await getProjectById(promptId);
+            const response = await getProjectById(projectId);
             const data = await response.json();
-
+            console.log(data);
             setData({
                 creator: data.creator,
                 project_name: data.project_name,
@@ -51,10 +51,10 @@ const ProjectPage = () => {
             });
         };
 
-        if (promptId) {
+        if (projectId) {
             getPromptDetails();
         }
-    }, [promptId]);
+    }, [projectId]);
 
     const fundProject = async (e) => {
         e.preventDefault();
@@ -78,16 +78,18 @@ const ProjectPage = () => {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
             const tx = await signer.sendTransaction({
-                to: "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199",// test address - address suplied by the fetching project data
+                to: `${process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS}`,
                 value: ethers.utils.parseUnits(fundAmount, 'ether')
             });
             console.log(tx);
-            return alert('Funding sent successfully.');
-            // const response = await fundProjectApi(promptId, account[0], fundAmount);
+            
+            const response = await fundProjectApi(projectId, tx);
+            
 
             // if (response.ok) {
             //     return alert('Funding sent successfully.');
             // }
+
         } catch (error) {
             setError(error);
         } finally {
@@ -97,7 +99,7 @@ const ProjectPage = () => {
 
     const handleAddToFavorite = async () => {
         try {
-            //await addToFavoritesApi(promptId);
+            //const response = await addToFavoritesApi(promptId);
 
             // if (response.ok) {
             //     return alert('Added to favorites.');
