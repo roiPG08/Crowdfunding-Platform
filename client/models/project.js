@@ -23,13 +23,13 @@ const ProjectSchema = new Schema({
         type: Number,
         required: [true, 'Project goal is required.'],
     },
-    donates: [{
-        address: { type: String, required: [true, 'Address is required.'] },
-        amount: { type: Number, required: [true, 'Amount is required.'] }
-      }],
     timeToFund: {
         type: String,
         required: [true, 'Funding end date is required.'],
+    },
+    createdAt: {
+        type: String,
+        required: [true, 'Creation date is required.'],
     },
     tag: {
         type: String,

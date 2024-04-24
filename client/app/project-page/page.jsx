@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import ProjectInfo from '@components/ProjectInfo';
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getProjectById, fundProjectApi } from "@src/api/projects";
+// import { getProjectById, fundProjectApi } from "@src/api/projects";
 import { useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 
@@ -31,21 +31,21 @@ const ProjectPage = () => {
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await getProjectById(projectId);
-            const data = await response.json();
-            console.log(data);
-            setData({
-                creator: data.creator,
-                project_name: data.project_name,
-                description: data.description,
-                wallet: data.wallet,
-                currentFunds: data.currentFunds,
-                goal: data.goal,
-                donates: data.donates,
-                timeToFund: data.timeToFund,
-                tag: data.tag,
-                images: data.images
-            });
+            // const response = await getProjectById(projectId);
+            // const data = await response.json();
+            // console.log(data);
+            // setData({
+            //     creator: data.creator,
+            //     project_name: data.project_name,
+            //     description: data.description,
+            //     wallet: data.wallet,
+            //     currentFunds: data.currentFunds,
+            //     goal: data.goal,
+            //     donates: data.donates,
+            //     timeToFund: data.timeToFund,
+            //     tag: data.tag,
+            //     images: data.images
+            // });
         };
 
         if (projectId) {
@@ -76,11 +76,11 @@ const ProjectPage = () => {
             });
             console.log(tx);
             
-            const response = await fundProjectApi(projectId, tx);
+            // const response = await fundProjectApi(projectId, tx);
 
-            if (response.ok) {
-                return alert('Funding sent successfully.');
-            }
+            // if (response.ok) {
+            //     return alert('Funding sent successfully.');
+            // }
 
         } catch (error) {
             setError(error);

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { deleteProjectApi } from "@src/api/projects";
+// import { deleteProjectApi } from "@src/api/projects";
 import Profile from '@/components/Profile';
 
 const MyProfile = () => {
@@ -30,7 +30,7 @@ const MyProfile = () => {
 
         if(hasConfirmed){
             try {
-                await deleteProjectApi(project._id);
+                // await deleteProjectApi(project._id);
 
                 const filteredProjects = projects.filter((p) => p._id !== project._id)
 

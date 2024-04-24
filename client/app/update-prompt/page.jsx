@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import Form from "@components/Form";
-import { updateProjectApi, getProjectById } from "@src/api/projects";
+// import { updateProjectApi, getProjectById } from "@src/api/projects";
 import { useDispatch } from 'react-redux';
 
 
@@ -21,15 +21,15 @@ const UpdatePrompt = () => {
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await getProjectById(promptId);
-            const data = await response.json();
+            // const response = await getProjectById(promptId);
+            // const data = await response.json();
 
-            setPost({
-                description: data.description,
-                goal: data.goal,
-                project_name: data.project_name,
-                tag: data.tag,
-            })
+            // setPost({
+            //     description: data.description,
+            //     goal: data.goal,
+            //     project_name: data.project_name,
+            //     tag: data.tag,
+            // })
         };
 
         if (promptId) {

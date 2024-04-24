@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ProjectCard from './ProjectCard';
-import { getAllProjects } from "@src/api/projects";
+import getProjectsList from "../services/context.js";
 
 
 const ProjectCardList = ({ data, handleTagClick }) => {
@@ -71,10 +71,11 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await getAllProjects();
-      const data = await response.json();
-      console.log(data);
-      setPosts(data);
+      const response = await getProjectsList();
+      // console.log(response);
+      // const data = await response.json();
+      // console.log(data);
+      // setPosts(data);
     }
 
     fetchPosts();

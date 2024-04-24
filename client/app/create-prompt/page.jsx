@@ -4,7 +4,9 @@ import { useSession } from "next-auth/react";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import Form from "@components/Form";
-import { createProjectApi } from "@src/api/projects";
+import project, { Project } from "@models/project"
+import { createProjectApi } from "@services/context";
+import project from "@models/project";
 
 const CreatePrompt = () => {
     const router = useRouter();
@@ -36,26 +38,28 @@ const CreatePrompt = () => {
                 "params": []
             });
             
-            const formData = new FormData();
-            formData.append("project_name", project.project_name);
-            formData.append("description", project.description);
-            formData.append("goal", project.goal);
-            formData.append("timeToFund", new Date(project.timeToFund).getTime());
-            formData.append("createdAt", Date.now());
-            formData.append("tag", project.tag);
-            formData.append("address", account[0]);
-            formData.append("userId", session?.user.id);
+            const project = new {
+              creator:   session?.user.id,
+              project_name: project.project_name,
+              description: project.description,
+              wallet: account[0],
+              currentFunds: 0,
+              goal: project.goal,
+              timeToFund: new Date(project.timeToFund).getTime(),
+              createdAt: Date.now(),
+              tag: project.tag,
+              images: project.imageFiles
+            };
+
+            const response = await createProjectApi(project);
             
-            project.imageFiles.forEach(element => {
-                formData.append("images", element);
-            });
+            alert("Project created successfully.");
+            router.push('/');
 
-            let response = await createProjectApi(formData);
-
-            if (response.status >= 200 && response.status < 300) {
-                alert("Project created successfully.");
-                router.push('/');
-            }
+            // if (response.status >= 200 && response.status < 300) {
+            //     alert("Project created successfully.");
+            //     router.push('/');
+            // }
         } catch (error) {
             console.log(error);
         } finally {
