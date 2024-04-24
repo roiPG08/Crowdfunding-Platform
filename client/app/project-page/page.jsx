@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import ProjectInfo from '@components/ProjectInfo';
 import { useRouter, useSearchParams } from 'next/navigation'
-// import { getProjectById, fundProjectApi } from "@src/api/projects";
 import { useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
+import { abi }  from "../../artifacts/contracts/Campaign.sol/Campaign.json";
 
 const ProjectPage = () => {
     const router = useRouter();
@@ -28,24 +28,48 @@ const ProjectPage = () => {
     const searchParams = useSearchParams();
     const projectId = searchParams.get('id');
     const [error, setError] = useState("");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const Campaign = new ethers.Contract(process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS, abi, signer);  
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            // const response = await getProjectById(projectId);
-            // const data = await response.json();
-            // console.log(data);
-            // setData({
-            //     creator: data.creator,
-            //     project_name: data.project_name,
-            //     description: data.description,
-            //     wallet: data.wallet,
-            //     currentFunds: data.currentFunds,
-            //     goal: data.goal,
-            //     donates: data.donates,
-            //     timeToFund: data.timeToFund,
-            //     tag: data.tag,
-            //     images: data.images
-            // });
+
+            const project = await Campaign.getProjectById(projectId);
+            const fetchUserData = await fetch(`/api/users/${project.creatorId}`);
+            const userData = await fetchUserData.json();
+            
+            const receivedData = {
+                id: project.id.toNumber(),
+                creator: userData,
+                project_name: project.name,
+                description: project.description,
+                projectOwner: project.projectOwner,
+                isFunded: project.isFunded,
+                status: project.status,
+                goal: project.goal.toNumber(),
+                tag: project.tag,
+                images: project.images,
+                timeToFund: project.unlockTime.toNumber(),
+                creationDate: project.creationDate.toNumber(),
+                currentFunds: ethers.utils.formatEther(project.currentFunds),
+                transactions: project.transactions
+            };
+            
+            console.log(receivedData);
+
+            setData({
+                creator: receivedData.creator,
+                project_name: receivedData.project_name,
+                description: receivedData.description,
+                wallet: receivedData.projectOwner,
+                currentFunds: receivedData.currentFunds,
+                goal: receivedData.goal,
+                donates: receivedData.transactions,
+                timeToFund: receivedData.timeToFund,
+                tag: receivedData.tag,
+                images: receivedData.images
+            });
         };
 
         if (projectId) {
@@ -62,26 +86,42 @@ const ProjectPage = () => {
             if(!window.ethereum){
                 throw new Error("Install crypto wallet to proceed.");
             }
-
-            const account = await window.ethereum.request({
-                "method": "eth_requestAccounts",
-                "params": []
-            });
             
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
-            const tx = await signer.sendTransaction({
-                to: `${process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS}`,
-                value: ethers.utils.parseUnits(fundAmount, 'ether')
-            });
+            const Campaign = new ethers.Contract(process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS, abi, signer);  
+
+            const tx = await Campaign.fundProject(projectId, {value: ethers.utils.parseUnits(fundAmount, 'ether')})
+
             console.log(tx);
+
+        } catch (error) {
+            setError(error);
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
+    const handleWithdrawal = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        setError(null);
+
+        try {
+            if(!window.ethereum){
+                throw new Error("Install crypto wallet to proceed.");
+            }
             
-            // const response = await fundProjectApi(projectId, tx);
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const Campaign = new ethers.Contract(process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS, abi, signer);  
 
-            // if (response.ok) {
-            //     return alert('Funding sent successfully.');
-            // }
+            console.log("Withdrawing started...");
 
+            const withdraw = await Campaign.withdrawFunds(projectId, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+
+            console.log(withdraw);
+            
         } catch (error) {
             setError(error);
         } finally {
@@ -108,6 +148,7 @@ const ProjectPage = () => {
             setFundAmount={setFundAmount}
             handleDonate={fundProject}
             handleAddToFavorite={handleAddToFavorite}
+            handleWithdrawal={handleWithdrawal}
             error={error}
         />
     )

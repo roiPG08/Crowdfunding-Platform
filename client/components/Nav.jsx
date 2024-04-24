@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 import { ConnectWallet, useAddress, useMetamask } from "@thirdweb-dev/react";
+import { ethers } from 'ethers';
+import { abi }  from "../artifacts/contracts/Campaign.sol/Campaign.json";
 
 const Nav = () => {
     const { data: session } = useSession();
@@ -20,6 +22,17 @@ const Nav = () => {
         }
         setUpProvider();
     }, []);
+
+    const getSmartContractBalance = async () => {
+        
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const Campaign = new ethers.Contract(process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS, abi, signer);  
+
+      const data = await Campaign.getWalletBalance();
+
+      console.log(ethers.utils.formatEther(data));
+    };
     
 
     return (
@@ -41,6 +54,10 @@ const Nav = () => {
             <Link href="/get-started" className='flex gap-2 flex-center'>
                 How to start
             </Link>
+
+            <button onClick={getSmartContractBalance}>
+                Check Balance
+            </button>
 
             <ConnectWallet></ConnectWallet>
 

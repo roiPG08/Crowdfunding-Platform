@@ -11,18 +11,18 @@ import {
 const Provider = ({ children, session }) => {
   return (
     <SessionProvider session={session}>
-      <ThirdwebProvider
-        supportedWallets={[
-          metamaskWallet({
-            recommended: true,
-          }),
-          coinbaseWallet(),
-          walletConnect(),
-        ]}
-        clientId="7181efc0eddb72ab014dfcecd8b47a2a"
-      >
-        {children}
-      </ThirdwebProvider>
+        <ThirdwebProvider
+          supportedWallets={[
+            metamaskWallet({
+              recommended: true,
+            }),
+            coinbaseWallet(),
+            walletConnect(),
+          ]}
+          clientId="7181efc0eddb72ab014dfcecd8b47a2a"
+        >
+          {children}
+        </ThirdwebProvider>
     </SessionProvider>
   )
 }

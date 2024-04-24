@@ -34,6 +34,7 @@ const Form = ({ type, setPost, submitting, handleSubmit, post }) => {
           id="default_size" 
           onChange={(e) => {
             const files = Array.from(e.target.files);
+            console.log(files);
             setPost({ ...post, imageFiles: files });
           }}
           type="file"></input>

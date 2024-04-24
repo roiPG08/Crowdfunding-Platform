@@ -1,9 +1,7 @@
 // const API_KEY = process.env.API_KEY;
 // const PRIVATE_KEY = process.env.LOCALHOST_PRIVATE_KEY;
-const CONTRACT_ADDRESS = process.env.LOCALHOST_CONTRACT_ADDRESS;
-
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS;
 import { ethers } from 'ethers';
-// import { Project } from "@models/project"
 import  User  from "../models/user"
 import { connectToDB } from "@utils/database.js";
 import  abi  from "../artifacts/contracts/Campaign.sol/Campaign.json";

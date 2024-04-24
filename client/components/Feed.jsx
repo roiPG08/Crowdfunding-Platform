@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import ProjectCard from './ProjectCard';
-import getProjectsList from "../services/context.js";
-
+import { ethers } from 'ethers';
+import { abi }  from "../artifacts/contracts/Campaign.sol/Campaign.json";
 
 const ProjectCardList = ({ data, handleTagClick }) => {
 
@@ -65,17 +65,38 @@ const Feed = () => {
 
   }
 
-  const handleShowProject = (project) => {
-    router.push(`/project-page?id=${project._id}`);
-  }
-
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await getProjectsList();
-      // console.log(response);
-      // const data = await response.json();
-      // console.log(data);
-      // setPosts(data);
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const Campaign = new ethers.Contract(process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS, abi, signer);  
+
+      const projects = await Campaign.getAllProjects();
+
+      const formattedProjects = await Promise.all(projects.map(async (element) => {
+        const fetchUserData = await fetch(`/api/users/${element.creatorId}`);
+        const userData = await fetchUserData.json();
+      
+        return {
+          id: element.id.toNumber(),
+          creator: userData,
+          project_name: element.name,
+          description: element.description,
+          projectOwner: element.projectOwner,
+          isFunded: element.isFunded,
+          status: element.status,
+          goal: element.goal.toNumber(),
+          tag: element.tag,
+          images: element.images,
+          timeToFund: element.unlockTime.toNumber(),
+          creationDate: element.creationDate.toNumber(),
+          currentFunds: ethers.utils.formatEther(element.currentFunds),
+          transactions: element.transactions
+        };
+      }));
+
+      setPosts(formattedProjects);
     }
 
     fetchPosts();
