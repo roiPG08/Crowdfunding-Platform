@@ -6,7 +6,6 @@ import ProjectInfo from '@components/ProjectInfo';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getProjectById, fundProjectApi } from "@src/api/projects";
 import { useDispatch } from 'react-redux';
-import { useAddress } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 
 const ProjectPage = () => {
@@ -28,7 +27,6 @@ const ProjectPage = () => {
     const [fundAmount, setFundAmount] = useState(0);
     const searchParams = useSearchParams();
     const projectId = searchParams.get('id');
-    const address = useAddress();
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -46,7 +44,6 @@ const ProjectPage = () => {
                 donates: data.donates,
                 timeToFund: data.timeToFund,
                 tag: data.tag,
-                location: data.location,
                 images: data.images
             });
         };
@@ -66,10 +63,6 @@ const ProjectPage = () => {
                 throw new Error("Install crypto wallet to proceed.");
             }
 
-            // if(fundAmount < 10){
-            //     throw new Error("Come on, don't be such a poory - pay more...")
-            // }
-
             const account = await window.ethereum.request({
                 "method": "eth_requestAccounts",
                 "params": []
@@ -85,7 +78,8 @@ const ProjectPage = () => {
             
             const response = await fundProjectApi(projectId, tx);
             
-
+            console.log(response);
+            console.log(response.status);
             // if (response.ok) {
             //     return alert('Funding sent successfully.');
             // }

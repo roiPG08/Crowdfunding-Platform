@@ -4,8 +4,13 @@ const router = require('express').Router();
 
 
 router.get("/projects", controller.getProjectsList);
+router.get("/project/:id/project-transactions", controller.getProjectTransactions);
+router.get("/proof-of-reserve", controller.getPlatformBalance);
 router.post("/project/new", uploadMiddleware, controller.addNewProject);
 router.post("/project/:id/fund", controller.fundProject);
+router.post("/project/collect-funds", controller.collectFunds);
+router.post("/project/generate-balance", controller.generateBalance);
+router.post("/project/release-funds", controller.releaseFunds);
 router.get('/project/:id', controller.getProjectById);
 router.patch('/update-project/:id', uploadMiddleware, controller.editProduct);
 router.delete('/delete-project/:id', controller.deleteProject);

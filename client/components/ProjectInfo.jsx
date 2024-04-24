@@ -31,15 +31,6 @@ const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavo
 
                         <p className="mt-4 flex">
                             <Image
-                                src={'/assets/icons/location.svg'}
-                                width={24}
-                                height={24}
-                                alt='location'
-                            />
-                            <span className="font-bold px-2">{projectData?.location}</span>
-                        </p>
-                        <p className="mt-4 flex">
-                            <Image
                                 src={'/assets/icons/category-icon.svg'}
                                 width={24}
                                 height={24}

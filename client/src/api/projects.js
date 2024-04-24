@@ -19,7 +19,7 @@ export const createProjectApi = async (formData, options = {}) => {
 
         return response;
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         throw error;
     }
 }
@@ -30,8 +30,8 @@ export const deleteProjectApi = (projectId, options = {}) =>
         ...options,
     });
 
-export const updateProjectApi = (promptId, projectName, projectDescription, projectGoal, tag, options = {}) =>
-    sendRequest(`/api/update-project/${promptId}`, {
+export const updateProjectApi = (projectId, projectName, projectDescription, projectGoal, tag, options = {}) =>
+    sendRequest(`/api/update-project/${projectId}`, {
         method: "PATCH",
         body: JSON.stringify({
             project_name: projectName,
@@ -42,10 +42,19 @@ export const updateProjectApi = (promptId, projectName, projectDescription, proj
         ...options,
     });
 
-export const fundProjectApi = (promptId, tx, options = {}) =>
-    sendRequest(`/api/project/${promptId}/fund`, {
+export const fundProjectApi = (projectId, tx, options = {}) =>
+    sendRequest(`/api/project/${projectId}/fund`, {
         body: JSON.stringify({
             tx: tx
+        }),
+        ...options,
+    });
+
+export const collectFundsApi = (projectId, address, options = {}) =>
+    sendRequest(`/api/project/collect-funds`, {
+        body: JSON.stringify({
+            id: projectId,
+            address: address
         }),
         ...options,
     });

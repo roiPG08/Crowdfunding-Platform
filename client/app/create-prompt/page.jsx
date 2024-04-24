@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import Form from "@components/Form";
 import { createProjectApi } from "@src/api/projects";
 
-
 const CreatePrompt = () => {
     const router = useRouter();
     const { data: session } = useSession();
@@ -23,33 +22,28 @@ const CreatePrompt = () => {
         tag: '',
     });
 
-    const calculateDaysLeft = () => {
-        if (!project.timeToFund) {
-          return null; 
-        }
-    
-        const deadlineDate = new Date(project.timeToFund); 
-        const currentDate = new Date(); 
-    
-        const differenceMs = deadlineDate - currentDate;
-    
-        const daysLeft = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
-
-        return daysLeft;
-      };
-
     const createPrompt = async (e) => {
         e.preventDefault();
         setSubmitting(true);
 
         try {
+            if(!window.ethereum){
+                throw new Error("Install crypto wallet to proceed.");
+            }
+
+            const account = await window.ethereum.request({
+                "method": "eth_requestAccounts",
+                "params": []
+            });
+            
             const formData = new FormData();
             formData.append("project_name", project.project_name);
             formData.append("description", project.description);
             formData.append("goal", project.goal);
-            formData.append("timeToFund", calculateDaysLeft());
+            formData.append("timeToFund", new Date(project.timeToFund).getTime());
+            formData.append("createdAt", Date.now());
             formData.append("tag", project.tag);
-            formData.append("location", project.location);
+            formData.append("address", account[0]);
             formData.append("userId", session?.user.id);
             
             project.imageFiles.forEach(element => {

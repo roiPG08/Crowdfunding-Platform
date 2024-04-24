@@ -6,7 +6,15 @@ require('dotenv').config();
 const {API_URL, PRIVATE_KEY } = process.env;
 
 module.exports = {
-    solidity: "0.8.19",
+    solidity: {
+        version: '0.8.19',
+        settings: {
+          optimizer: {
+            runs: 200,
+            enabled: true
+          }
+        }
+    },
     defaultNetwork: "sepolia",
     networks: {
         hardhat: {},

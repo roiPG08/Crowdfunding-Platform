@@ -13,7 +13,7 @@ const { abi } = require("./../../artifacts/contracts/Campaign.sol/Campaign.json"
 const Campaign = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
 
 const addNewProject = async (req, res) => {
-    const { userId, project_name, description, goal, tag, location, timeToFund } = req.body;
+    const { userId, project_name, description, address, goal, tag, /*location,*/ timeToFund, createdAt } = req.body;
     const images = req.files;
 
     const imagesNames = [];
@@ -22,44 +22,106 @@ const addNewProject = async (req, res) => {
     });
 
     try {
-        const project = await Campaign.createProject(userId, project_name, description, goal, timeToFund, tag, location, imagesNames);
-        console.log(project);
+        const project = await Campaign.createProject(userId, project_name, description, address, goal, timeToFund, createdAt, tag, /*location,*/ imagesNames);
+        //console.log(project);
         res.status(201).json(project);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: error.message });
+        //console.log(error);
+        res.status(500).json({ error: `Failed to create new project. Error: ${error.message}` });
     }
 };
+
 
 const getProjectsList = async (req, res) => {
     try {
         const projects = await Campaign.getAllProjects();
-
+        //console.log(projects);
         const formattedProjects = await Promise.all(projects.map(formatProject))
-
-        //console.log(formattedProjects);
 
         res.status(200).json(formattedProjects);
     } catch (error) {
-        //console.log(error);
-        res.status(500).json({ error: "Failed to get projects list" });
+        res.status(500).json({ error: `Failed to retrieve projects list. Error: ${error.message}` });
     }
 };
 
 const getProjectById = async (req, res) => {
     try {
         const project = await Campaign.getProjectById(req.params.id);
-
+        //console.log(project);
         const formattedProject = await formatProject(project);
-
-        //console.log(formattedProject);
 
         if (!project) res.status(404).json({ error: "Project not found" });
 
         res.status(200).json(formattedProject);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to get your data" });
+        res.status(500).json({ error: `Failed to retrieve data. Error: ${error.message}` });
+    }
+};
+
+const getProjectTransactions = async (req, res) => {
+    try {
+        const { id } = req.params.id;
+
+        const request = await Campaign.releaseFunds(id);
+        
+        res.status(200).json(request);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to donate. Error: ${error.message}` });
+    }
+};
+
+const getUsersProjects = async (req, res) => {
+    try {
+
+        const prompts = await Project.find({ creator: req.params.id }).populate('creator');
+
+        res.status(200).json(prompts);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to retrieve data. Error: ${error.message}` });
+    }
+};
+
+const getPlatformBalance = async (req, res) => {
+    try {
+        const balance = await Campaign.getWalletBalance();
+        //console.log(balance);
+        res.status(200).json(ethers.utils.formatEther(balance));
+    } catch (error) {
+        res.status(500).json({ error: `Failed to connect. Error: ${error.message}` });
+    }
+};
+
+const collectFunds = async (req, res) => {
+    try {
+        const { id, address } = req.body;
+
+        const request = await Campaign.withdrawFunds(id, address);
+        
+        res.status(200).json(request);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to collect funds. Error: ${error.message}` });
+    }
+};
+
+const generateBalance = async (req, res) => {
+    try {
+        const request = await Campaign.withdrawFunds();
+        
+        res.status(200).json(request);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to generate funds. Error: ${error.message}` });
+    }
+};
+
+const releaseFunds = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        const request = await Campaign.releaseFunds(id);
+        
+        res.status(200).json(request);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to release funds. Error: ${error.message}` });
     }
 };
 
@@ -86,8 +148,7 @@ const editProduct = async (req, res) => {
         await existingProject.save();
         res.status(200).json(existingProject);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to update" });
+        res.status(500).json({ error: `Failed to update project. Error: ${error.message}` });
     }
 };
 
@@ -98,20 +159,7 @@ const deleteProject = async (req, res) => {
 
         res.status(200).json({ message: "Prompt deleted successfully" });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to delete" });
-    }
-};
-
-const getUsersProjects = async (req, res) => {
-    try {
-
-        const prompts = await Project.find({ creator: req.params.id }).populate('creator');
-
-        res.status(200).json(prompts);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to get your data" });
+        res.status(500).json({ error: `Failed to delete project. Error: ${error.message}` });
     }
 };
 
@@ -122,46 +170,15 @@ const fundProject = async (req, res) => {
         const { from, to, hash, value } = tx;
 
         const data = await Campaign.fundProject(id, hash, from, {value: value});
-        console.log(data);
-        res.status(200).json(tx);
-        //if (response.success) {
-        // const existingProject = await Project.findById(id);
-        // if (!existingProject) return res.status(404).json({ error: "Project not found" });
-
-        // const projectsSC = await Campaign.getAllProjects();
-        // let walletAddress = "";
-
-        // projectsSC.forEach(element => {
-        //     if(element.name == existingProject.project_name){
-        //         console.log("Found project wallet: " + element.projectOwner)
-        //         walletAddress = element.projectOwner;
-        //     }
-        // });
-
-        // existingProject.currentFunds += amount;
-        // existingProject.donates.push(new {
-        //     address,
-        //     amount
-        // });
-
-        // if(existingProject.currentFunds == existingProject.goal){
-        //     //SEND NOTIFICATION --- TO DO
-        // }
-
-        //await existingProject.save();
-        // res.status(200).json(existingProject);
-        //}
-
+        res.status(200).json(data);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Failed to donate." });
+        res.status(500).json({ error: `Failed to donate. Error: ${error.message}` });
     }
 }
 
 const formatProject = async (project) => {
-    const [id, userId, name, description, projectOwner, isFunded, goal, tag, location, images, unlockTime, currentFunds, funders, donations] = project;
+    const [id, userId, name, description, projectOwner, isFunded, status, goal, tag, images, unlockTime, creationDate, currentFunds, transactions] = project;
 
-    // Fetch creator data asynchronously
     const creator = await User.findById(userId);
 
     return {
@@ -171,15 +188,15 @@ const formatProject = async (project) => {
         description,
         projectOwner,
         isFunded,
-        goal: goal.toNumber(),
+        status,
+        goal: goal.toNumber(),//ethers.utils.formatEther(goal),//.toNumber(),
         tag,
-        location,
         images,
         unlockTime: unlockTime.toNumber(),
+        creationDate: creationDate.toNumber(),
         currentFunds: ethers.utils.formatEther(currentFunds),
-        funders,
-        donations
+        transactions
     };
 };
 
-module.exports = { addNewProject, getProjectsList, getProjectById, getUsersProjects, editProduct, deleteProject, fundProject };
+module.exports = { addNewProject, getProjectsList, getProjectById, getUsersProjects, editProduct, deleteProject, generateBalance, fundProject, getProjectTransactions, releaseFunds, collectFunds, getPlatformBalance };
