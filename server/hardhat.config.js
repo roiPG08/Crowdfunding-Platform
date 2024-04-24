@@ -15,9 +15,14 @@ module.exports = {
           }
         }
     },
-    defaultNetwork: "sepolia",
+    defaultNetwork: "hardhat",
     networks: {
-        hardhat: {},
+        hardhat: {
+            accounts: {
+                //mnemonic: process.env.LOCALHOST_SEED_PHRASE,
+            },
+            chainId: 1337,
+        },
         sepolia: {
             url: API_URL,
             accounts: [PRIVATE_KEY],

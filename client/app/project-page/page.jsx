@@ -77,12 +77,10 @@ const ProjectPage = () => {
             console.log(tx);
             
             const response = await fundProjectApi(projectId, tx);
-            
-            console.log(response);
-            console.log(response.status);
-            // if (response.ok) {
-            //     return alert('Funding sent successfully.');
-            // }
+
+            if (response.ok) {
+                return alert('Funding sent successfully.');
+            }
 
         } catch (error) {
             setError(error);

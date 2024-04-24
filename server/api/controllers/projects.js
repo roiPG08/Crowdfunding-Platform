@@ -169,7 +169,7 @@ const fundProject = async (req, res) => {
         const id = req.params.id;
         const { from, to, hash, value } = tx;
 
-        const data = await Campaign.fundProject(id, hash, from, {value: value});
+        const data = await Campaign.fundProject(id, hash, from, value);//{value: value}); passing msg.value provokes 
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: `Failed to donate. Error: ${error.message}` });

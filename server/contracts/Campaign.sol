@@ -6,7 +6,7 @@ import "hardhat/console.sol";
 contract Campaign {
     uint public projectsCount = 0;
     uint public transactionId = 0;
-    address payable public wallet;
+    address payable wallet;
 
     mapping(uint => Project) public projects;
     mapping(uint => Transaction) public transactions;
@@ -134,24 +134,24 @@ contract Campaign {
         );
     }
 
-    function fundProject(uint _id, string memory _txHash, address _sender ) public payable {
-        uint amount = msg.value;
+    function fundProject(uint _id, string memory _txHash, address _sender, uint value ) public payable {
+        // uint amount = msg.value;
         Project storage _project = projects[_id];
 
         console.log(
             "Transaction: from %s - %s tokens",
             _sender,
-            amount
+            value
         );
 
         require(_project.id >= 0 && _project.id <= projectsCount);
         require(!_project.isFunded);
         require(_project.creationDate <= _project.unlockTime, "Project's funding period has finished.");
 
-        _project.currentFunds += amount;
+        _project.currentFunds += value;
         _project.transactionIds.push(transactionId);
 
-        transactions[transactionId] = Transaction(transactionId, _txHash, amount, payable(_sender));
+        transactions[transactionId] = Transaction(transactionId, _txHash, value, payable(_sender));
         transactionId++;
 
         if (_project.currentFunds == _project.goal) {
@@ -169,10 +169,10 @@ contract Campaign {
 
         projects[_id] = _project;
 
-        emit TransactionSent(_id, _txHash, amount, msg.sender);
+        emit TransactionSent(_id, _txHash, value, msg.sender);
     }
 
-    function withdrawFunds(uint _id, address _receiver) public { //add payable onlyOwner
+    function withdrawFunds(uint _id, address _receiver) public payable {
         Project memory _project = projects[_id];
 
         console.log(_receiver);
@@ -182,13 +182,18 @@ contract Campaign {
 
         require(_project.id >= 0 && _project.id <= projectsCount, "Project's Id is not valid.");
         //require(_project.isFunded, "Project needs to achieve funding target.");
-        require(_receiver == _project.projectOwner, "Funds may be collected only to the same person that created campaign.");
+        //require(_receiver == _project.projectOwner, "Funds may be collected only to the same person that created campaign.");
+
+        _project.currentFunds = 0;
+        projects[_id] = _project;
+        
+        console.log(address(_project.projectOwner).balance);
 
         (bool sent, ) = payable(_project.projectOwner).call{value: _project.currentFunds}("");
         require(sent, "Failed to send Ether"); 
 
-        _project.currentFunds = 0;
-        projects[_id] = _project;
+        console.log(address(_project.projectOwner).balance);
+
     }
 
     function releaseFunds(uint _id) external {
@@ -214,9 +219,11 @@ contract Campaign {
     function getWalletBalance() external view returns (uint) {
         console.log(wallet);
         console.log(address(wallet).balance);
-        console.log(msg.sender);
+        console.log(msg.sender); //1199 ending server
         console.log(address(msg.sender).balance);
-        console.log(address(this));
+        console.log(address(0xdD2FD4581271e230360230F9337D5c0430Bf44C0));
+        console.log(address(0xdD2FD4581271e230360230F9337D5c0430Bf44C0).balance);
+        console.log(address(this)); //smart contract - which serves as a wallet
         console.log(address(this).balance);
         return address(this).balance;
     }
