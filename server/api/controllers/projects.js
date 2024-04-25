@@ -15,7 +15,7 @@ const Campaign = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
 const addNewProject = async (req, res) => {
     const { userId, project_name, description, address, goal, tag, /*location,*/ timeToFund, createdAt } = req.body;
     const images = req.files;
-
+    
     const imagesNames = [];
     images.forEach(element => {
         imagesNames.push(element.filename);
@@ -169,7 +169,7 @@ const fundProject = async (req, res) => {
         const id = req.params.id;
         const { from, to, hash, value } = tx;
 
-        const data = await Campaign.fundProject(id, hash, from, value);//{value: value}); passing msg.value provokes 
+        const data = await Campaign.fundProject(id, from, value, hash);//{value: value}); passing msg.value provokes 
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: `Failed to donate. Error: ${error.message}` });

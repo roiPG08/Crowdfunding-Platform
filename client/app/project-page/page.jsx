@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import ProjectInfo from '@components/ProjectInfo';
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getProjectById, fundProjectApi } from "@src/api/projects";
+import { getProjectById, fundProjectApi, collectFundsApi } from "@src/api/projects";
 import { useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 
@@ -100,7 +100,27 @@ const ProjectPage = () => {
             console.log(error);
         } finally {
             setSubmitting(false);
-        }    }    
+        }    
+    }
+    
+    const handleFundsWithdrawal = async () => {
+        try {
+            const account = await window.ethereum.request({
+                "method": "eth_requestAccounts",
+                "params": []
+            });
+
+            const response = await collectFundsApi(projectId, account[0]);
+
+            if (response.ok) {
+                return alert('Congratulations! Funds are sent to your account.');
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setSubmitting(false);
+        }    
+    }   
 
     return (
         <ProjectInfo
@@ -108,6 +128,7 @@ const ProjectPage = () => {
             setFundAmount={setFundAmount}
             handleDonate={fundProject}
             handleAddToFavorite={handleAddToFavorite}
+            handleFundsWithdrawal={handleFundsWithdrawal}
             error={error}
         />
     )

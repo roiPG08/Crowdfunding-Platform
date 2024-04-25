@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import '../styles/globals.css';
 import Image from 'next/image';
 import ErrorMessage from './ErrorMessage';
+import { useSession } from 'next-auth/react';
 
-const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavorite, error }) => {
+const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavorite, handleFundsWithdrawal, error }) => {
+    const { data: session } = useSession();
 
     return (
         <section className='w-full'>
@@ -44,6 +46,9 @@ const ProjectInfo = ({ projectData, setFundAmount, handleDonate, handleAddToFavo
                     <div className="w-1/2 pl-8 p-4">
                         <div className="flex justify-between items-center">
                             <h1 className="text-4xl font-bold text-black">{projectData?.project_name}</h1>
+                            {session?.user.id === projectData.creator._id && (
+                             <button className="btn-donate p-8" onClick={handleFundsWithdrawal}>Withdraw Collected Funds</button>
+                            )}
                             <button className="p-2 btn-favorite" onClick={handleAddToFavorite}>❤ Save</button>
                         </div>
 
