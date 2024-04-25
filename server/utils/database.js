@@ -4,7 +4,7 @@ require("dotenv").config();
 let isConnected = false; //track the connection status
 let connectionPromise = null;
 
-const connectToDB = async () => {
+const connectToMongoDb = async () => {
     mongoose.set('strictQuery', true);
 
     if (isConnected) {
@@ -29,4 +29,4 @@ const connectToDB = async () => {
 
 }
 
-module.exports = {connectToDB};
+module.exports = {connectToMongoDb};

@@ -74,6 +74,7 @@ const ProjectPage = () => {
                 to: `${process.env.NEXT_PUBLIC_LOCALHOST_CONTRACT_ADDRESS}`,
                 value: ethers.utils.parseUnits(fundAmount, 'ether')
             });
+            
             console.log(tx);
             
             const response = await fundProjectApi(projectId, tx);

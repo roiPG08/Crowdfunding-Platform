@@ -1,4 +1,4 @@
-const { connectToDB } = require("./utils/database.js");
+const { connectToMongoDb } = require("./utils/database.js");
 const express = require('express');
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -9,7 +9,7 @@ const app = express();
 const PORT = 8080;
 
 
-connectToDB();
+connectToMongoDb();
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));

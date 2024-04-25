@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { connectToDB } from '/utils/database';
+import { connectToMongoDb } from '/utils/database';
 import User from '/models/user';
 
 const handler = NextAuth({
@@ -19,7 +19,7 @@ const handler = NextAuth({
         },
         async signIn({ profile }){
             try {
-                await connectToDB();
+                await connectToMongoDb();
     
                 const userExists = await User.findOne({
                     email: profile.email
@@ -29,7 +29,11 @@ const handler = NextAuth({
                     await User.create({
                         email: profile.email,
                         username: profile.name.replace(" ", "").toLowerCase(),
-                        image: profile.picture
+                        image: profile.picture,
+                        projectsCreated: [],
+                        isSavingDonations: false,
+                        donationsList: [],
+                        favouriteList: []
                     })
                 }
                 console.log("User creation completed.");
